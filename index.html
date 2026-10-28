@@ -159,10 +159,45 @@ details summary{font-weight:800;cursor:pointer}
 .note{font-size:12px;color:var(--muted);line-height:1.5}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-size:13.5px;font-weight:700;z-index:99;transition:.25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%)}
+/* REAL CHARACTERS */
+.char-face{overflow:hidden}
+.char-face img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.upload-box{border:1.5px dashed #c9bfa8;border-radius:12px;padding:14px;text-align:center;background:var(--panel2);margin-top:10px}
+.upload-box p{margin:0 0 8px;font-size:12.5px;color:var(--muted);line-height:1.45}
+.theme-motif{position:absolute;bottom:12px;right:18px;font-size:15px;letter-spacing:5px;opacity:.5;pointer-events:none;z-index:1}
+.theme-divider{font-size:13px;letter-spacing:7px;opacity:.55;margin:-4px 0 10px;white-space:nowrap;overflow:hidden}
+.cover-motif{font-size:22px;letter-spacing:10px;margin-top:16px;opacity:.9}
+.char-badge{position:absolute;top:14px;right:16px;display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #eee3c8;border-radius:999px;padding:4px 11px 4px 4px;font-size:11.5px;font-weight:700;color:#221f1a;box-shadow:0 3px 10px rgba(0,0,0,.10);z-index:3;max-width:46%}
+.char-badge img{width:26px;height:26px;border-radius:50%;object-fit:cover;display:block}
+.char-badge .bface{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:15px}
+.cover-char{margin:18px auto 4px;text-align:center}
+.cover-char img{width:128px;height:128px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,.85);box-shadow:0 14px 30px rgba(0,0,0,.28);display:block;margin:0 auto}
+.cover-char .cface{width:128px;height:128px;border-radius:50%;display:grid;place-items:center;font-size:58px;margin:0 auto;border:4px solid rgba(255,255,255,.85);box-shadow:0 14px 30px rgba(0,0,0,.28)}
+.cover-char .cname{margin-top:9px;font-weight:800;letter-spacing:.04em;font-size:15px}
+.big-char-img{width:180px;height:180px;border-radius:50%;object-fit:cover;border:5px solid #fff;box-shadow:0 14px 30px rgba(0,0,0,.18);display:block;margin:0 auto}
+.char-lib{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.char-lib-item{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px;background:var(--panel2)}
+.char-lib-item img,.char-lib-item .lface{width:40px;height:40px;border-radius:50%;object-fit:cover;display:grid;place-items:center;font-size:20px;flex:none}
+.char-lib-item .grow{flex:1;min-width:0}
+.char-lib-item b{font-size:13.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.char-lib-item span{font-size:12px;color:var(--muted)}
+.char-lib-item button{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700}
+.char-lib-item.active{outline:2px solid #111}
+.stk-img{width:54px;height:54px;object-fit:cover;border-radius:50%;border:2px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.14);cursor:pointer;background:#fff}
+.char-sticker-btn{padding:4px!important;display:grid;place-items:center}
+.char-sticker-btn img{width:34px;height:34px;border-radius:50%;object-fit:cover;display:block}
+#pdfProgress{position:fixed;inset:0;background:rgba(17,15,12,.72);z-index:200;display:none;place-items:center;padding:20px}
+#pdfProgress .box{background:var(--panel);color:var(--ink);border-radius:16px;padding:22px;max-width:380px;width:100%;text-align:center;box-shadow:var(--shadow)}
+#pdfProgress .bar{height:10px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:14px 0 8px}
+#pdfProgress .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1450a0,#c9a356);transition:width .3s}
 @media print{
-  .toolbar,.left,.right,.tabs,.no-print{display:none!important}
-  body{background:#fff}.layout{display:block;padding:0}.pages{gap:0}
-  .page{box-shadow:none;max-width:none;page-break-after:always;border-radius:0}
+  .toolbar,.left,.right,.tabs,.no-print,#pdfProgress,.toast{display:none!important}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  .layout{display:block!important;padding:0!important;max-width:none!important}
+  .pages{gap:0!important;display:block!important}
+  .page{box-shadow:none!important;max-width:none!important;width:100%!important;page-break-after:always;break-after:page;page-break-inside:avoid;border-radius:0!important;margin:0!important}
+  .page:last-child{page-break-after:auto;break-after:auto}
+  .char-badge{box-shadow:none}
 }
 </style>
 </head>
@@ -175,8 +210,9 @@ details summary{font-weight:800;cursor:pointer}
   </div>
   <div class="actions">
     <button class="btn" id="addNoteBtn">+ Notepad page</button>
+    <button class="btn gold" id="pdfBtn">⬇ Download My Planner PDF</button>
     <button class="btn" id="downloadBtn">Download planner (.html)</button>
-    <button class="btn gold" id="printHelpBtn">How to print / save PDF</button>
+    <button class="btn" id="printHelpBtn">Printing tips</button>
   </div>
 </header>
 
@@ -221,7 +257,7 @@ details summary{font-weight:800;cursor:pointer}
   <main>
     <div class="tabs" id="tabs"></div>
     <div class="pages" id="pages"></div>
-    <p class="note no-print" style="text-align:center;margin-top:16px">Tip: click any heading, line or table cell on a page and type. Use your browser's Print → Save as PDF to export a finished, sellable copy.</p>
+    <p class="note no-print" style="text-align:center;margin-top:16px">Tip: click any heading, line or table cell on a page and type. When you're done, tap <b>Download My Planner PDF</b> at the top — you get a real, print-ready PDF of this exact planner (cover, every insert, and back cover, one page per PDF page) at the planner size you picked. Fallback: from your browser's own menu, Print → Save as PDF — this page is print-clean, so only the planner pages come out, each on its own sheet at your chosen size.</p>
   </main>
 
   <!-- RIGHT: CUSTOMIZER -->
@@ -241,21 +277,20 @@ details summary{font-weight:800;cursor:pointer}
         <option value="selfcare">Self-Care Planner</option>
       </select>
 
-      <label for="themeSel">Theme — cover, colors &amp; pages match</label>
-      <select id="themeSel">
-        <option value="glam">Glam Sapphire &amp; Pearl</option>
-        <option value="lv">Paris Monogram — LV-inspired luxury</option>
-        <option value="gg">Milano Double-G — GG-inspired luxury</option>
-        <option value="noir">Noir &amp; Gold Editorial</option>
-        <option value="blush">Blush Rose Atelier</option>
-        <option value="halloween">Halloween — Midnight Pumpkin</option>
-        <option value="christmas">Christmas — Sapphire Noel</option>
-        <option value="pup">Classic Cartoon Pup — inspired, original</option>
-        <option value="cat">Lazy Orange Cat — inspired, original</option>
-        <option value="canary">Yellow Canary — inspired, original</option>
-        <option value="forest">Blue Forest Friends — inspired, original</option>
-        <option value="whirl">Whirlwind Rascal — Tasmanian-inspired, original</option>
-      </select>
+      <label for="themeSearch">Theme library — 54 themes</label>
+      <input type="text" id="themeSearch" placeholder="Search themes… try “cat”, “beach”, “faith”">
+      <div class="chips" id="themeGroups" style="margin-top:8px">
+        <button class="chip active" data-tgroup="all" type="button">All 54</button>
+        <button class="chip" data-tgroup="cartoon" type="button">Cartoon &amp; Character</button>
+        <button class="chip" data-tgroup="seasonal" type="button">Seasonal &amp; Holiday</button>
+        <button class="chip" data-tgroup="luxury" type="button">Luxury &amp; Style</button>
+        <button class="chip" data-tgroup="life" type="button">Life &amp; Interests</button>
+      </div>
+      <label for="themeSel">Theme — cover, colors, lettering, pages &amp; stickers match</label>
+      <select id="themeSel" size="6"></select>
+      <p class="small" id="themeCount"></p>
+      <p class="small" id="themeDetail" style="color:var(--ink)"></p>
+      <p class="small">Cartoon themes are original, inspired-by designs — no copied licensed artwork. Want an exact character? Add it yourself with the real-character upload below.</p>
 
       <label>Cover material finish</label>
       <div class="chips" id="finishChips">
@@ -286,12 +321,26 @@ details summary{font-weight:800;cursor:pointer}
       <input type="text" id="ownerInput" placeholder="e.g. Glam — or your buyer's name" value="Glam">
       <label for="yearInput">Planner year</label>
       <input type="text" id="yearInput" value="2026">
+      <label for="sizeSel">Planner size — used for your PDF</label>
+      <select id="sizeSel">
+        <option value="letter" selected>Letter — 8.5 × 11 in (US)</option>
+        <option value="a5">A5 — 5.8 × 8.3 in</option>
+        <option value="half">Half Letter — 5.5 × 8.5 in</option>
+        <option value="a4">A4 — 8.3 × 11.7 in</option>
+      </select>
+      <p class="small">Your PDF is built at this size — one planner page per PDF page, in the exact order you see it, with everything you typed in.</p>
     </div>
 
     <div class="panel">
       <h2>Digital stickers</h2>
       <p class="small">Tap a sticker, then it lands in the sticker zone of the page you're viewing. Tap a placed sticker to remove it.</p>
       <div class="sticker-grid" id="stickerGrid"></div>
+      <h3 id="themeStickerTitle">Theme stickers</h3>
+      <p class="small">These change with your theme — tap one onto the page you're viewing.</p>
+      <div class="sticker-grid" id="themeStickerGrid"></div>
+      <h3>Your character stickers</h3>
+      <p class="small" id="charStickerHint">Add a real character below and it shows up here as a sticker you can tap onto any page.</p>
+      <div class="sticker-grid" id="charStickerGrid"></div>
       <h3>Notepad page styles</h3>
       <div class="chips">
         <button class="chip" data-note="lined">Lined</button>
@@ -302,20 +351,35 @@ details summary{font-weight:800;cursor:pointer}
     </div>
 
     <div class="panel">
-      <h2>Create your own character</h2>
-      <p class="small">Build an original mascot for your theme — name it, style it, and it gets its own page in the planner. Original characters are the ones you can sell.</p>
+      <h2>Add a real character</h2>
+      <p class="small">Bring in a <b>real</b> character — upload your own character art, a photo, your pet, a drawing, or art you bought with a license — name it, and it goes on the <b>cover</b>, gets <b>its own character page</b>, shows on the <b>section pages</b>, and joins the <b>sticker tray</b>. Use art you own or have permission to use.</p>
       <div class="char-preview">
         <div class="char-face" id="charFace" style="background:#ffd9e8">🦋</div>
         <div style="font-weight:800" id="charNamePrev">Bibi the Butterfly</div>
         <div class="note" id="charTraitPrev">Sapphire wings • Pearl bow • Collects tiny joys</div>
       </div>
+      <div class="upload-box">
+        <p><b>Upload real character art</b><br>PNG or JPG from your phone or computer. A picture with a plain or transparent background looks best.</p>
+        <input type="file" id="charUpload" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none">
+        <button class="btn gold" id="charUploadBtn" type="button" style="width:100%">📷 Upload character art / photo</button>
+        <p id="charUploadName" style="margin:8px 0 0;font-weight:700;color:var(--ink)"></p>
+        <button class="btn" id="charClearImg" type="button" style="display:none;margin-top:8px">Remove uploaded art</button>
+      </div>
       <label>Character name</label><input type="text" id="charName" value="Bibi the Butterfly">
-      <label>Kind</label>
-      <select id="charKind"><option>Butterfly</option><option>Kitten</option><option>Puppy</option><option>Bunny</option><option>Bear Cub</option><option>Canary</option><option>Whirlwind Rascal</option><option>Star Sprite</option></select>
-      <label>Signature color</label>
+      <label>Kind / who is this?</label>
+      <select id="charKind"><option>Butterfly</option><option>My Real Character</option><option>Photo Character</option><option>Pet</option><option>Kitten</option><option>Puppy</option><option>Bunny</option><option>Bear Cub</option><option>Canary</option><option>Whirlwind Rascal</option><option>Star Sprite</option></select>
+      <label>Signature color (behind emoji characters)</label>
       <select id="charColor"><option value="#7fb2e5">Sapphire blue</option><option value="#ffd9e8">Pearl pink</option><option value="#ffe45c">Canary yellow</option><option value="#f59e2c">Sunset orange</option><option value="#b7e3c0">Mint</option><option value="#d9c6f2">Lavender</option></select>
       <label>Accessory &amp; trait</label><input type="text" id="charTrait" value="Pearl bow • Collects tiny joys">
-      <button class="btn primary" id="charApply" style="width:100%;margin-top:12px">Add my character to the planner</button>
+      <button class="btn primary" id="charApply" style="width:100%;margin-top:12px">Add this character to my planner</button>
+      <h3>Your characters in this planner</h3>
+      <div class="char-lib" id="charLib"><p class="small" style="margin:0">No real character added yet — upload one above, name it, and tap “Add this character.”</p></div>
+      <p class="small">Tap a character in the list to make it the cover character. Every character you add gets its own page and its own sticker.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Create your own character</h2>
+      <p class="small">No art handy? The studio above still works the classic way — pick a kind and color with no upload and you get an original mascot page instead. Original characters are the ones you can sell.</p>
     </div>
 
     <div class="panel">
@@ -329,12 +393,15 @@ details summary{font-weight:800;cursor:pointer}
 </div>
 
 <div id="printHelp" class="no-print" style="display:none;position:fixed;inset:auto 16px 16px auto;max-width:360px;z-index:80;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)">
-  <strong>Print / save as PDF</strong>
-  <p class="small" style="color:var(--muted);line-height:1.5">Open this page in your browser, then use <b>Print</b> (Ctrl/Cmd + P) → <b>Save as PDF</b>. The builder panels hide automatically and each planner page prints on its own sheet. Or tap <b>Download planner (.html)</b> above for an editable copy you can sell or share.</p>
+  <strong>Printing tips</strong>
+  <p class="small" style="color:var(--muted);line-height:1.5">Easiest: tap <b>Download My Planner PDF</b> above and print that file — it's built at the planner size you picked. Fallback: in your browser's own menu use <b>Print</b> (Ctrl/Cmd + P) → <b>Save as PDF</b>; the builder panels hide automatically, each planner page comes out on its own sheet, and the sheet size follows the planner size you picked. Or tap <b>Download planner (.html)</b> above for an editable copy you can sell or share.</p>
   <button class="btn" onclick="document.getElementById('printHelp').style.display='none'">Got it</button>
 </div>
 <div class="toast" id="toast">Done</div>
+<style id="pageSizeStyle">@page{size:letter portrait;margin:0}</style>
+<div id="pdfProgress" role="status" aria-live="polite"><div class="box"><strong style="font-size:18px">Building your PDF…</strong><p class="small" id="pdfProgressText" style="color:var(--muted);margin:8px 0 0">Preparing your planner pages — cover, inserts and back cover, exactly as you filled them in.</p><div class="bar"><i id="pdfBar"></i></div><p class="small" id="pdfCount" style="margin:0"></p></div></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
 /* ============ DATA ============ */
 var TYPOS=[
@@ -353,6 +420,66 @@ var TYPOS=[
  {n:"Crochet — Homespun Hand",f:"'Caveat',cursive"},
  {n:"Classic Agenda — Cormorant",f:"'Cormorant Garamond',serif"}
 ];
+/* ============ 54 THEMES ============ */
+/* [id, name, group, cover gradient, cover ink, accent, typo index, finish, pattern/motif, stickers, art style] */
+var THEME_GROUPS={cartoon:"Cartoon & Character-Inspired",seasonal:"Seasonal & Holiday",luxury:"Luxury & Style",life:"Life & Interests"};
+var THEMES_DATA=[
+["pup","Cartoon Pup","cartoon","linear-gradient(160deg,#f4e3b2,#e8cf8a)","#4a2c14","#c0392b",4,"Linen cloth","🐶 🦴 ⭐ ","🐶|🦴|⭐|🐾|🎾|❤️","Vintage Boutique — serif & rules"],
+["cat","Lazy Orange Cat","cartoon","linear-gradient(160deg,#f59e2c,#e07f13)","#2e1a05","#7a3b06",9,"Gloss lacquer","🐱 🍕 💤 ","🐱|🍕|💤|🐾|🧶|☀️","Modern Kawaii — rounded & sweet"],
+["canary","Yellow Canary","cartoon","linear-gradient(160deg,#ffe45c,#ffd21a)","#3a2f05","#e06a1a",9,"Gloss lacquer","🐤 🎵 🌤️ ","🐤|🎵|🌤️|⭐|🎀|💛","Modern Kawaii — rounded & sweet"],
+["forest","Blue Forest Friends","cartoon","linear-gradient(160deg,#7fb2e5,#4a86c5)","#0e2a44","#2a6cb8",7,"Linen cloth","🐻 🌲 💙 ","🐻|🦊|🌲|💙|🍄|⭐","Watercolor Atelier — soft washes"],
+["whirl","Whirlwind Rascal","cartoon","linear-gradient(160deg,#8a5a2b,#6b3f1a)","#ffe9c2","#ffb347",4,"Linen cloth","🌪️ ⭐ 🍂 ","🌪️|⭐|🍂|💥|🐾|🎉","Vintage Boutique — serif & rules"],
+["honeybear","Honey Bear","cartoon","linear-gradient(160deg,#f7c948,#e89b1c)","#4a2f05","#8a5a00",7,"Linen cloth","🐻 🍯 🌼 ","🐻|🍯|🌼|🐝|⭐|❤️","Watercolor Atelier — soft washes"],
+["wabbit","Silly Wabbit","cartoon","linear-gradient(160deg,#dfe8d5,#bcd3a8)","#2f4020","#e07f13",7,"Linen cloth","🐰 🥕 🌿 ","🐰|🥕|🌿|⭐|🌸|❤️","Modern Kawaii — rounded & sweet"],
+["sassyduck","Sassy Duck","cartoon","linear-gradient(160deg,#fff3b0,#ffd93b)","#3a2f05","#2a7fbf",9,"Gloss lacquer","🦆 💧 ⭐ ","🦆|💧|⭐|🎀|☀️|💛","Modern Kawaii — rounded & sweet"],
+["mouse","Mouse Sweethearts","cartoon","linear-gradient(160deg,#b4232a,#8f1a21)","#fff5f5","#c0392b",0,"Gloss lacquer","🎀 ❤️ ○ ","🎀|❤️|⭐|🧀|🌹|✨","Minimal Luxe — clean editorial"],
+["pinkcat","Sleek Pink Cat","cartoon","linear-gradient(160deg,#ffd9e8,#f7a8c4)","#4a1230","#b76e79",2,"Gloss lacquer","🐱 🎀 ✨ ","🐱|🎀|✨|💎|🌸|👑","Minimal Luxe — clean editorial"],
+["puppatrol","Pup Patrol Heroes","cartoon","linear-gradient(160deg,#1d5fa8,#d33a2c)","#ffffff","#1d5fa8",4,"Gloss lacquer","🐾 ⭐ 🛡️ ","🐾|⭐|🚨|🦴|❤️|🎖️","Vintage Boutique — serif & rules"],
+["unicorn","Unicorn Dreams","cartoon","linear-gradient(160deg,#f9d5ff,#a8e6ff)","#4a235e","#e06ac0",0,"Quilted pearl","🦄 🌈 ⭐ ","🦄|🌈|⭐|💖|✨|🎀","Watercolor Atelier — soft washes"],
+["mermaid","Mermaid Lagoon","cartoon","linear-gradient(160deg,#0e7a7b,#37b8a2)","#eafffb","#0e7a7b",0,"Gloss lacquer","🧜 🐚 🌊 ","🧜‍♀️|🐚|🌊|⭐|💎|🫧","Watercolor Atelier — soft washes"],
+["dino","Dino Roar","cartoon","linear-gradient(160deg,#5a8a3c,#86b95e)","#1e3010","#5a8a3c",4,"Linen cloth","🦕 🌋 🌿 ","🦕|🦖|🌋|🌿|⭐|🥚","Vintage Boutique — serif & rules"],
+["space","Space Explorers","cartoon","linear-gradient(160deg,#101736,#2a3a7a)","#eaf0ff","#2a7fbf",3,"Gloss lacquer","🚀 ⭐ 🪐 ","🚀|⭐|🪐|🌙|👩‍🚀|✨","Photo-Real Studio — crisp product look"],
+["pirate","Pirate Treasure","cartoon","linear-gradient(160deg,#2b2118,#5a3d22)","#ffe9c2","#8a5a00",5,"Saffiano leather","⚓ 💎 🗺️ ","🏴‍☠️|💎|🗺️|⚓|⭐|🦜","Vintage Boutique — serif & rules"],
+["fairy","Fairy Garden","cartoon","linear-gradient(160deg,#d9f2d0,#a8dba8)","#24402a","#e06ac0",0,"Quilted pearl","🧚 🌸 ✨ ","🧚|🌸|✨|🦋|🍄|⭐","Watercolor Atelier — soft washes"],
+["superhero","Superhero Kids","cartoon","linear-gradient(160deg,#1a3aa8,#e02b2b)","#ffffff","#e02b2b",4,"Gloss lacquer","💥 ⭐ ⚡ ","💥|⭐|⚡|🦸|❤️|🎉","Vintage Boutique — serif & rules"],
+["teddy","Teddy Bear Picnic","cartoon","linear-gradient(160deg,#f3e2c7,#dfc09a)","#4a3220","#b76e79",7,"Linen cloth","🧸 🍓 🧺 ","🧸|🍓|🧺|🌼|❤️|🎀","Watercolor Atelier — soft washes"],
+["kitten","Kitten Cuties","cartoon","linear-gradient(160deg,#ffeef5,#ffd9e8)","#5b2333","#e88ca0",6,"Quilted pearl","🐱 🎀 🧶 ","🐱|🎀|🧶|💖|⭐|🌸","Modern Kawaii — rounded & sweet"],
+["halloween","Halloween Spooky Cute","seasonal","linear-gradient(160deg,#1d1426,#3b2352 60%,#120c1a)","#ffb347","#ff7a1a",4,"Gloss lacquer","🎃 👻 🍂 ","🎃|👻|🍂|🦇|🕯️|⭐","Vintage Boutique — serif & rules"],
+["christmas","Christmas Cozy","seasonal","linear-gradient(160deg,#7a1620,#a51f2b 55%,#4f7a4a)","#fff8e7","#a51f2b",2,"Saffiano leather","🎄 ❄️ ⭐ ","🎄|❄️|⭐|🎁|🔔|❤️","Minimal Luxe — clean editorial"],
+["easter","Easter Spring","seasonal","linear-gradient(160deg,#d8f3dc,#ffd9e8)","#2f4a2f","#7ab87a",8,"Quilted pearl","🐣 🌷 🥚 ","🐣|🌷|🥚|🐰|🌸|✨","Watercolor Atelier — soft washes"],
+["valentine","Valentine Hearts","seasonal","linear-gradient(160deg,#a4133c,#e04a6a)","#fff0f3","#c9184a",0,"Gloss lacquer","❤️ 💌 🌹 ","❤️|💌|🌹|💖|🎀|✨","Minimal Luxe — clean editorial"],
+["thanksgiving","Thanksgiving Harvest","seasonal","linear-gradient(160deg,#8a4b1f,#c97b2e)","#fff3e0","#a85a1e",5,"Linen cloth","🦃 🍂 🥧 ","🦃|🍂|🥧|🌽|❤️|✨","Vintage Boutique — serif & rules"],
+["patriotic","Patriotic Stars","seasonal","linear-gradient(160deg,#1d3557,#b4232a)","#ffffff","#1d3557",4,"Saffiano leather","⭐ 🎆 ✦ ","⭐|🎆|❤️|💙|✨|🎉","Vintage Boutique — serif & rules"],
+["newyear","New Year Sparkle","seasonal","linear-gradient(160deg,#141428,#2e2e5a)","#ffeec2","#b9975b",2,"Gloss lacquer","🎉 ✨ 🥂 ","🎉|✨|🥂|⭐|🎆|👑","Minimal Luxe — clean editorial"],
+["birthday","Birthday Bash","seasonal","linear-gradient(160deg,#ff8fab,#ffd21a)","#4a1230","#e05a7a",9,"Gloss lacquer","🎂 🎉 🎈 ","🎂|🎉|🎈|🎁|⭐|🧁","Modern Kawaii — rounded & sweet"],
+["backtoschool","Back to School","seasonal","linear-gradient(160deg,#2a7fbf,#ffd21a)","#102a44","#2a7fbf",6,"Linen cloth","✏️ 📚 🍎 ","✏️|📚|🍎|⭐|🎒|✅","Modern Kawaii — rounded & sweet"],
+["pumpkinspice","Fall Pumpkin Spice","seasonal","linear-gradient(160deg,#c96a1e,#e8a35c)","#3a1e05","#c96a1e",8,"Linen cloth","🎃 ☕ 🍂 ","🎃|☕|🍂|🧡|🌻|✨","Watercolor Atelier — soft washes"],
+["winter","Winter Snowflake","seasonal","linear-gradient(160deg,#7fb2e5,#dbeeff)","#0e2a44","#2a6cb8",11,"Quilted pearl","❄️ ⛄ 🌲 ","❄️|⛄|🌲|✨|☕|💙","Minimal Luxe — clean editorial"],
+["summerbeach","Summer Beach","seasonal","linear-gradient(160deg,#ffb347,#37b8d8)","#083344","#e05a3a",9,"Gloss lacquer","🏖️ 🌊 ☀️ ","🏖️|🌊|☀️|🐚|🍦|⭐","Modern Kawaii — rounded & sweet"],
+["glam","Glam Sapphire & Pearl","luxury","linear-gradient(160deg,#0b2a52,#1450a0 55%,#081c38)","#ffffff","#1450a0",0,"Saffiano leather","🦋 💎 ✨ ","🦋|💎|✨|👑|💙|🎀","Photo-Real Studio — crisp product look"],
+["lv","LV-Inspired Monogram","luxury","linear-gradient(160deg,#4a3220,#6b4a2c 55%,#3a2716)","#f3e6cf","#8a6a34",2,"Monogram canvas","✦ LV ✦ LV ","✦|💎|👑|👜|⭐|✨","Minimal Luxe — clean editorial"],
+["gg","GG-Inspired Interlock","luxury","linear-gradient(160deg,#cbb99a,#b7a07a 55%,#a68f63)","#2e2416","#7a2e2e",2,"Monogram canvas","G G · G G · ","✦|🎀|👑|👜|⭐|✨","Minimal Luxe — clean editorial"],
+["noir","Noir Luxe","luxury","linear-gradient(160deg,#141414,#2a2a2a)","#f2ede6","#8a6d3b",11,"Saffiano leather","◆ ✦ ◆ ","◆|✦|👑|💎|⭐|✨","Minimal Luxe — clean editorial"],
+["blush","Blush Rose Gold","luxury","linear-gradient(160deg,#f6d5dd,#eeb3c2)","#5b2333","#b76e79",2,"Quilted pearl","🌹 ✨ 🎀 ","🌹|✨|🎀|💖|👑|💎","Watercolor Atelier — soft washes"],
+["marble","Marble & Gold","luxury","linear-gradient(160deg,#f4f1ea,#d9d2c2)","#2b2620","#b9975b",11,"Gloss lacquer","✦ ◆ ✦ ","✦|💎|👑|⭐|✨|🕯️","Minimal Luxe — clean editorial"],
+["leopard","Leopard Luxe","luxury","linear-gradient(160deg,#c98a3d,#8a5a1f)","#2e1a05","#8a5a1f",2,"Gloss lacquer","🐆 ✦ ⭐ ","🐆|✦|⭐|👑|💎|✨","Photo-Real Studio — crisp product look"],
+["denim","Denim Days","luxury","linear-gradient(160deg,#2a4a7a,#4a6fa5)","#ffffff","#2a4a7a",5,"Linen cloth","✦ 🧵 ✦ ","⭐|✦|❤️|🎀|✨|👖","Vintage Boutique — serif & rules"],
+["boho","Boho Botanical","luxury","linear-gradient(160deg,#e8dcc8,#c9b896)","#3f3423","#7a8a4a",5,"Linen cloth","🌿 🌸 ☀️ ","🌿|🌸|☀️|🦋|✨|🌻","Watercolor Atelier — soft washes"],
+["retrocomic","Vintage Retro Comic","luxury","linear-gradient(160deg,#ffd21a,#e8b91a)","#161616","#e02b2b",4,"Gloss lacquer","💥 ⭐ ✦ ","💥|⭐|✦|❤️|💙|🎉","Vintage Boutique — serif & rules"],
+["kawaii","Kawaii Pastel","luxury","linear-gradient(160deg,#ffd9e8,#c8e6ff)","#4a235e","#e88ca0",6,"Quilted pearl","🌸 ⭐ 🎀 ","🌸|⭐|🎀|💖|✨|🧸","Modern Kawaii — rounded & sweet"],
+["galaxy","Galaxy Stars","luxury","linear-gradient(160deg,#160f2e,#3b2352)","#e8e0ff","#5a3a9a",3,"Gloss lacquer","⭐ 🌙 🪐 ","⭐|🌙|🪐|✨|💜|🚀","Photo-Real Studio — crisp product look"],
+["faith","Faith & Grace","life","linear-gradient(160deg,#f4ead5,#d9c9a3)","#4a3a1a","#b9975b",0,"Quilted pearl","🕊️ ✨ 🌿 ","🕊️|✨|🌿|❤️|📖|🕯️","Watercolor Atelier — soft washes"],
+["bossbabe","Boss Babe","life","linear-gradient(160deg,#2b1220,#571c3a)","#ffe0ec","#c94a7a",3,"Saffiano leather","👑 💼 ✨ ","👑|💼|✨|💎|💖|⭐","Photo-Real Studio — crisp product look"],
+["momlife","Mom Life","life","linear-gradient(160deg,#f6d5dd,#ffd9a0)","#5b2333","#c96a7a",7,"Quilted pearl","❤️ 🧸 🌸 ","❤️|🧸|🌸|☕|⭐|🎀","Watercolor Atelier — soft washes"],
+["teacher","Teacher Apple","life","linear-gradient(160deg,#fff3d6,#ffd9a0)","#3a2a10","#c0392b",6,"Linen cloth","🍎 ✏️ 📚 ","🍎|✏️|📚|⭐|❤️|✅","Modern Kawaii — rounded & sweet"],
+["nurse","Nurse Care","life","linear-gradient(160deg,#dbeeff,#a8d8ea)","#0e2a44","#2a7fbf",6,"Gloss lacquer","🩺 ❤️ ✚ ","🩺|❤️|✚|⭐|💙|✨","Minimal Luxe — clean editorial"],
+["garden","Garden Floral","life","linear-gradient(160deg,#d8f3dc,#95c98f)","#1e4020","#4a8a4a",8,"Linen cloth","🌷 🌿 🦋 ","🌷|🌿|🦋|🌸|☀️|✨","Watercolor Atelier — soft washes"],
+["ocean","Ocean Waves","life","linear-gradient(160deg,#0e5a7a,#37a8c8)","#eaffff","#0e7a9a",11,"Gloss lacquer","🌊 🐚 ✨ ","🌊|🐚|✨|⭐|💙|🫧","Watercolor Atelier — soft washes"],
+["butterflyglam","Butterfly Glam","life","linear-gradient(160deg,#2a1a5e,#7a3aa0)","#f3e8ff","#7a3aa0",0,"Quilted pearl","🦋 ✨ 💎 ","🦋|✨|💎|💜|🎀|👑","Photo-Real Studio — crisp product look"],
+["music","Music Vibes","life","linear-gradient(160deg,#1c1a2e,#3a2a4a)","#f0eaff","#c94a9a",9,"Gloss lacquer","🎵 🎧 ✨ ","🎵|🎧|✨|⭐|💖|🎤","Modern Kawaii — rounded & sweet"],
+["bookclub","Book Club","life","linear-gradient(160deg,#4a3220,#7a5a34)","#f7ead0","#a85a32",11,"Saffiano leather","📚 ☕ 🌹 ","📚|☕|🌹|✨|🔖|❤️","Vintage Boutique — serif & rules"]
+];
+function getTheme(id){var t=THEMES_DATA.filter(function(x){return x[0]===id;})[0];return t?{id:t[0],name:t[1],group:t[2],bg:t[3],ink:t[4],accent:t[5],typo:t[6],finish:t[7],pattern:t[8],stickers:t[9].split("|"),art:t[10]}:null;}
 var SETS={
  agenda:{label:"Agenda",coverSub:"Daily Life Planner",sections:[
    ["Daily Page","Focus, schedule & top 3",[["Date",""],["Today's top 3 priorities",""],["Schedule — hour by hour",""],["Notes & reminders",""]],"time"],
@@ -426,7 +553,7 @@ var HOLIDAYS2026=[
 ];
 var STICKERS=["🦋","⭐","💎","🌸","🎀","👑","✨","💙","🍂","🎃","🎄","❄️","🌷","☕","✈️","💰","📌","✅","🔖","💡","📸","🛍️","🍽️","🧸","🐾","🌈","💐","🕯️","📖","💌"];
 var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
-var state={noteCount:0,charAdded:false,finish:"Saffiano leather",accent:"#1450a0",activeId:"page-cover"};
+var state={noteCount:0,charAdded:false,finish:"Saffiano leather",accent:"#1450a0",activeId:"page-cover",realChars:[],activeCharId:null,pendingCharImage:null,pendingCharFileName:"",themeId:"glam",themeGroup:"all"};
 
 /* ============ HELPERS ============ */
 function el(html){var d=document.createElement("div");d.innerHTML=html;return d.firstElementChild;}
@@ -461,6 +588,14 @@ function monthCal(y,m){
   return s+"</tr></table>";
 }
 
+function getActiveChar(){if(!state.realChars.length)return null;var c=state.realChars.filter(function(x){return x.id===state.activeCharId;})[0];return c||state.realChars[state.realChars.length-1];}
+function escHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function charBadgeHtml(c){if(!c)return "";var vis=c.image?'<img src="'+c.image+'" alt="">':'<span class="bface" style="background:'+c.color+'">'+c.emoji+'</span>';return '<div class="char-badge" aria-hidden="true">'+vis+'<span>'+escHtml(c.name)+'</span></div>';}
+function charLargeHtml(c){if(c.image)return '<img class="big-char-img" src="'+c.image+'" alt="'+escHtml(c.name)+'">';return '<div class="char-face" style="background:'+c.color+';width:180px;height:180px;font-size:76px;margin:0 auto">'+c.emoji+'</div>';}
+function curTheme(){return getTheme(state.themeId)||getTheme("glam");}
+function themeDividerHtml(){var t=curTheme();return '<div class="theme-divider" aria-hidden="true">'+(t.pattern.repeat(4))+'</div>';}
+function themeMotifHtml(){var t=curTheme();return '<div class="theme-motif" aria-hidden="true">'+t.pattern+'</div>';}
+
 /* ============ RENDER ============ */
 function render(){
   var type=document.getElementById("typeSel").value;var set=SETS[type];
@@ -468,17 +603,19 @@ function render(){
   var year=document.getElementById("yearInput").value||"2026";
   var pages=document.getElementById("pages");pages.innerHTML="";var index=[];var n=0;
   function addPage(id,kicker,title,body,extraClass){
-    n++;var p=el('<section class="page '+(extraClass||"")+'" id="'+id+'">'+holes()+'<div class="page-kicker">'+kicker+'</div><h2 contenteditable="true">'+title+'</h2><div class="rule"></div>'+body+'</section>');
+    n++;var ac=getActiveChar();var badge=(ac&&id!=="page-index")?charBadgeHtml(ac):"";
+    var p=el('<section class="page '+(extraClass||"")+'" id="'+id+'">'+holes()+badge+'<div class="page-kicker">'+kicker+'</div><h2 contenteditable="true">'+title+'</h2><div class="rule"></div>'+themeDividerHtml()+body+themeMotifHtml()+'</section>');
     pages.appendChild(p);index.push([id,title]);return p;
   }
   /* COVER */
-  n++;var themeName=document.getElementById("themeSel").selectedOptions[0].textContent;
-  var pattern=document.body.dataset.theme==="lv"?"✦ LV ✦ LV ✦ LV ✦ LV ":document.body.dataset.theme==="gg"?"G G · G G · G G · ":"";
-  var cover=el('<section class="page cover cover-bg" id="page-cover"><div class="cover-inner"><div class="cover-pattern">'+(pattern.repeat(40))+'</div><div class="brandline" contenteditable="true">The '+year+' Collection • '+state.finish+'</div><div class="cover-title gold-foil" id="coverTitle" contenteditable="true">'+set.label+' Planner</div><div class="cover-sub" contenteditable="true">'+set.coverSub+' • '+year+'</div><p style="max-width:440px;line-height:1.6;opacity:.9" contenteditable="true">A planner made to be used — every page clicks, types and prints beautifully.</p><div class="cover-name"><label style="color:inherit;opacity:.8">This planner belongs to</label><input type="text" value="'+owner.replace(/"/g,"")+'" aria-label="Owner name"></div><div style="margin-top:14px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.8" contenteditable="true">'+themeName+'</div></div></section>');
+  n++;var themeObj=curTheme();var themeName=themeObj.name+" — "+THEME_GROUPS[themeObj.group];
+  var pattern=themeObj.pattern;
+  var cover=el('<section class="page cover cover-bg" id="page-cover"><div class="cover-inner"><div class="cover-pattern">'+(pattern.repeat(36))+'</div><div class="cover-motif" aria-hidden="true">'+pattern+'</div><div class="brandline" contenteditable="true">The '+year+' Collection • '+state.finish+'</div><div class="cover-title gold-foil" id="coverTitle" contenteditable="true">'+set.label+' Planner</div><div class="cover-sub" contenteditable="true">'+set.coverSub+' • '+year+'</div><p style="max-width:440px;line-height:1.6;opacity:.9" contenteditable="true">A planner made to be used — every page clicks, types and prints beautifully.</p><div class="cover-name"><label style="color:inherit;opacity:.8">This planner belongs to</label><input type="text" value="'+owner.replace(/"/g,"")+'" aria-label="Owner name"></div><div style="margin-top:14px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.8" contenteditable="true">'+themeName+'</div></div></section>');
   cover.querySelector(".cover-title").style.fontFamily=getComputedStyle(document.documentElement).getPropertyValue("--font-cover");
   pages.appendChild(cover);index.push(["page-cover","Cover"]);
+  (function(){var ac=getActiveChar();if(!ac)return;var inner=cover.querySelector(".cover-inner");if(!inner)return;var cc=el('<div class="cover-char"></div>');cc.innerHTML=(ac.image?'<img src="'+ac.image+'" alt="'+escHtml(ac.name)+'">':'<div class="cface" style="background:'+ac.color+'">'+ac.emoji+'</div>')+'<div class="cname" contenteditable="true">'+escHtml(ac.name)+'</div>';var cn=inner.querySelector(".cover-name");if(cn)inner.insertBefore(cc,cn);else inner.appendChild(cc);})();
   /* INDEX PAGE */
-  addPage("page-index","Contents","Index — tap any line to jump",'<div id="indexInPage"></div><p class="note">This index is hyperlinked — in the printed PDF and on screen, each line jumps to its section.</p>');
+  addPage("page-index","Contents","Index — tap any line to jump",'<div id="indexInPage"></div><p class="note">On screen this index is hyperlinked — tap any line to jump straight to its section. In the PDF, your pages follow in this index order, so the printed planner reads in the same sequence.</p>');
   /* SET SECTIONS */
   set.sections.forEach(function(sec,i){addPage("page-sec-"+i,set.label+" • Insert "+(i+1),sec[0],'<p contenteditable="true" data-ph="What is this page for?">'+sec[1]+'</p>'+sectionBody(sec));});
   /* 2026 CALENDAR */
@@ -491,8 +628,12 @@ function render(){
   addPage("page-passwords","Private Section","Password Keeper",'<p contenteditable="true">For your personal copy only — remove this page from any planner you sell or share. Passwords typed here live on this page only and are never sent anywhere.</p><table class="pl"><tr><th>Site</th><th>Username</th><th>Password</th><th>Notes</th></tr>'+pwRows+'</table><button class="btn no-print" id="pwToggle" style="margin-top:10px">Show / hide passwords</button>'+stickerZone());
   /* NOTEPAD STARTER */
   addPage("page-notes","Notepad","Notes — Lined",'<div class="lined" contenteditable="true" data-ph="Start writing…"></div>'+stickerZone());
-  /* CHARACTER PAGE */
-  if(state.charAdded){
+  /* CHARACTER PAGES — one per real character added */
+  if(state.realChars.length){
+    state.realChars.forEach(function(c,ci){
+      addPage("page-character-"+c.id,"My Character"+(state.realChars.length>1?" "+(ci+1):""),c.name,'<div style="text-align:center;padding:10px 0">'+charLargeHtml(c)+'<p contenteditable="true" style="margin-top:14px">'+escHtml(c.kind)+' • '+escHtml(c.trait)+'</p></div><div class="field-grid"><div class="field"><label>Personality</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Favorite things</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Catchphrase</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Shows up on these pages</label><input type="text" placeholder="Cover, section pages &amp; stickers"></div></div>'+stickerZone());
+    });
+  } else if(state.charAdded){
     var nm=document.getElementById("charName").value||"My Character";var kind=document.getElementById("charKind").value;var col=document.getElementById("charColor").value;var tr=document.getElementById("charTrait").value;
     addPage("page-character","My Character",nm,'<div style="text-align:center;padding:10px 0"><div class="char-face" style="background:'+col+';width:130px;height:130px;font-size:58px;margin:0 auto">'+charEmoji(kind)+'</div><p contenteditable="true" style="margin-top:12px">'+kind+' • '+tr+'</p></div><div class="field-grid"><div class="field"><label>Personality</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Favorite things</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Catchphrase</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Shows up on these pages</label><input type="text" placeholder="Type here…"></div></div>'+stickerZone());
   }
@@ -511,6 +652,7 @@ function render(){
   index.slice(0,9).forEach(function(it){var t=el('<button class="tab">'+it[1]+'</button>');t.dataset.target=it[0];t.onclick=function(){jumpTo(it[0]);};tabs.appendChild(t);});
   var pw=document.getElementById("pwToggle");
   if(pw)pw.onclick=function(){document.querySelectorAll('#page-passwords input[type=password], #page-passwords input[data-show="1"]').forEach(function(inp){if(inp.type==="password"){inp.type="text";inp.dataset.show="1";}else{inp.type="password";delete inp.dataset.show;}});};
+  if(typeof refreshCharUI==="function")refreshCharUI();
   observePages();
 }
 function jumpTo(id){state.activeId=id;var t=document.getElementById(id);if(t)t.scrollIntoView({behavior:"smooth",block:"start"});markActive(id);}
@@ -532,7 +674,14 @@ TYPOS.forEach(function(t,i){var o=document.createElement("option");o.value=i;o.t
 function applyTypo(){var t=TYPOS[typoSel.value];document.documentElement.style.setProperty("--font-cover",t.f);document.getElementById("typoPreview").style.fontFamily=t.f;document.getElementById("typoPreview").textContent=t.n.split("—")[0].trim();var ct=document.getElementById("coverTitle");if(ct)ct.style.fontFamily=t.f;}
 typoSel.addEventListener("change",applyTypo);
 document.getElementById("typeSel").addEventListener("change",function(){render();applyTypo();toast(SETS[this.value].label+" insert set loaded — cover, inserts, core pages & back cover");});
-document.getElementById("themeSel").addEventListener("change",function(){document.body.dataset.theme=this.value;render();applyTypo();toast("Theme applied — cover, colors, pages & lettering now match");});
+/* ============ THEME ENGINE — 54 themes ============ */
+function addStickerToPage(s){var page=document.getElementById(state.activeId)||document.querySelector(".page");var z=page?page.querySelector(".sticker-zone"):null;if(!z){toast("Open a page with a sticker zone first");return;}var st=el('<span class="stk">'+s+'</span>');st.title="Tap to remove";st.onclick=function(){st.remove();};z.appendChild(st);toast("Sticker added to "+(page.querySelector("h2")?page.querySelector("h2").textContent:"page"));}
+function renderThemeStickers(){var t=curTheme();var grid=document.getElementById("themeStickerGrid");if(!grid)return;grid.innerHTML="";var title=document.getElementById("themeStickerTitle");if(title)title.textContent="Theme stickers — "+t.name;t.stickers.forEach(function(s){var b=el('<button class="sticker-btn">'+s+'</button>');b.onclick=function(){addStickerToPage(s);};grid.appendChild(b);});}
+function applyThemeVars(id){var t=getTheme(id);if(!t)return;state.themeId=id;document.body.dataset.theme=id;document.body.style.setProperty("--cover-bg",t.bg);document.body.style.setProperty("--cover-ink",t.ink);document.body.style.setProperty("--cover-accent",t.accent);document.documentElement.style.setProperty("--cover-accent",t.accent);state.accent=t.accent;state.finish=t.finish;document.querySelectorAll("#finishChips .chip").forEach(function(c){c.classList.toggle("active",c.dataset.finish===t.finish);});typoSel.value=String(t.typo);var art=document.getElementById("artSel");if(art)art.value=t.art;var det=document.getElementById("themeDetail");if(det)det.innerHTML="<b>"+escHtml(t.name)+"</b> • "+escHtml(THEME_GROUPS[t.group])+"<br>Finish: "+escHtml(t.finish)+" • Lettering: "+escHtml(TYPOS[t.typo].n)+"<br>Motif: "+t.pattern+" • Stickers: "+t.stickers.join(" ");renderThemeStickers();}
+function populateThemes(){var sel=document.getElementById("themeSel");var q=(document.getElementById("themeSearch").value||"").toLowerCase().trim();var grp=state.themeGroup;sel.innerHTML="";var shown=0;Object.keys(THEME_GROUPS).forEach(function(gk){if(grp!=="all"&&grp!==gk)return;var list=THEMES_DATA.filter(function(t){return t[2]===gk&&(!q||t[1].toLowerCase().indexOf(q)>-1);});if(!list.length)return;var og=document.createElement("optgroup");og.label=THEME_GROUPS[gk]+" ("+list.length+")";list.forEach(function(t){var o=document.createElement("option");o.value=t[0];o.textContent=t[1];og.appendChild(o);shown++;});sel.appendChild(og);});var cnt=document.getElementById("themeCount");if(cnt)cnt.textContent=shown+" of 54 themes shown"+(grp!=="all"||q?" — clear search / tap All 54 to see everything":"")+".";if(!shown){var o2=document.createElement("option");o2.textContent="No theme matches — try another word";o2.disabled=true;sel.appendChild(o2);return;}if(THEMES_DATA.some(function(t){return t[0]===state.themeId;})&&Array.prototype.some.call(sel.options,function(o){return o.value===state.themeId;}))sel.value=state.themeId;else sel.value=sel.options[0].value;}
+document.getElementById("themeSel").addEventListener("change",function(){if(!this.value||!getTheme(this.value))return;applyThemeVars(this.value);render();applyTypo();toast(curTheme().name+" applied — cover, finish, lettering, page art & stickers now match");});
+document.getElementById("themeSearch").addEventListener("input",function(){populateThemes();});
+document.getElementById("themeGroups").addEventListener("click",function(e){var b=e.target.closest("[data-tgroup]");if(!b)return;state.themeGroup=b.dataset.tgroup;document.querySelectorAll("#themeGroups .chip").forEach(function(c){c.classList.toggle("active",c===b);});populateThemes();if(document.getElementById("themeSel").value&&getTheme(document.getElementById("themeSel").value)&&document.getElementById("themeSel").value!==state.themeId){applyThemeVars(document.getElementById("themeSel").value);render();applyTypo();}});
 document.getElementById("artSel").addEventListener("change",function(){toast("Art style set: "+this.value);});
 document.getElementById("ownerInput").addEventListener("input",function(){var inp=document.querySelector(".cover-name input");if(inp)inp.value=this.value;});
 document.getElementById("yearInput").addEventListener("change",function(){render();applyTypo();});
@@ -545,15 +694,22 @@ STICKERS.forEach(function(s){var b=el('<button class="sticker-btn">'+s+'</button
 function addNote(style){
   state.noteCount++;var pages=document.getElementById("pages");var back=document.getElementById("page-back");
   var body=style==="dotted"?'<div class="dotted" contenteditable="true" data-ph="Dot-grid notes…"></div>':style==="blank"?'<div class="blank" contenteditable="true" data-ph="Blank page — sketch, brainstorm, anything…"></div>':style==="checklist"?checksFrom("Task one|Task two|Task three|Task four|Task five|Task six"): '<div class="lined" contenteditable="true" data-ph="Start writing…"></div>';
-  var p=el('<section class="page" id="page-note-'+state.noteCount+'">'+holes()+'<div class="page-kicker">Notepad • '+style+'</div><h2 contenteditable="true">Notes — '+style.charAt(0).toUpperCase()+style.slice(1)+'</h2><div class="rule"></div>'+body+stickerZone()+'</section>');
+  var ac2=getActiveChar();var p=el('<section class="page" id="page-note-'+state.noteCount+'">'+holes()+(ac2?charBadgeHtml(ac2):"")+'<div class="page-kicker">Notepad • '+style+'</div><h2 contenteditable="true">Notes — '+style.charAt(0).toUpperCase()+style.slice(1)+'</h2><div class="rule"></div>'+themeDividerHtml()+body+stickerZone()+themeMotifHtml()+'</section>');
   pages.insertBefore(p,back);toast("Notepad page added ("+style+") — find it before the back cover");
 }
 document.getElementById("addNoteBtn").onclick=function(){addNote("lined");};
 document.querySelectorAll("[data-note]").forEach(function(b){b.onclick=function(){addNote(b.dataset.note);};});
-/* character builder */
-function syncChar(){var kind=document.getElementById("charKind").value;document.getElementById("charFace").textContent=charEmoji(kind);document.getElementById("charFace").style.background=document.getElementById("charColor").value;document.getElementById("charNamePrev").textContent=document.getElementById("charName").value||"My Character";document.getElementById("charTraitPrev").textContent=kind+" • "+(document.getElementById("charTrait").value||"");}
-["charName","charKind","charColor","charTrait"].forEach(function(id){document.getElementById(id).addEventListener("input",syncChar);});
-document.getElementById("charApply").onclick=function(){state.charAdded=true;render();applyTypo();jumpTo("page-character");toast("Your character has its own page in the planner");};
+/* character builder + real character uploads */
+function syncChar(){var kind=document.getElementById("charKind").value;var face=document.getElementById("charFace");if(state.pendingCharImage){face.style.background="transparent";face.innerHTML='<img src="'+state.pendingCharImage+'" alt="Uploaded character art">';}else{face.innerHTML="";face.textContent=charEmoji(kind);face.style.background=document.getElementById("charColor").value;}document.getElementById("charNamePrev").textContent=document.getElementById("charName").value||"My Character";document.getElementById("charTraitPrev").textContent=kind+" • "+(document.getElementById("charTrait").value||"");}
+["charName","charKind","charColor","charTrait"].forEach(function(id){document.getElementById(id).addEventListener("input",syncChar);document.getElementById(id).addEventListener("change",syncChar);});
+document.getElementById("charUploadBtn").onclick=function(){document.getElementById("charUpload").click();};
+document.getElementById("charUpload").addEventListener("change",function(){var f=this.files&&this.files[0];if(!f)return;if(f.type.indexOf("image/")!==0){toast("Please choose an image file");return;}var reader=new FileReader();reader.onload=function(){state.pendingCharImage=reader.result;state.pendingCharFileName=f.name;document.getElementById("charUploadName").textContent="✓ "+f.name+" — ready to add";document.getElementById("charClearImg").style.display="";if(!document.getElementById("charName").value||document.getElementById("charName").value==="Bibi the Butterfly"){var base=f.name.replace(/\.[^.]+$/,"").replace(/[-_]+/g," ").trim();if(base)document.getElementById("charName").value=base.charAt(0).toUpperCase()+base.slice(1);}syncChar();toast("Character art loaded — name it and tap Add");};reader.readAsDataURL(f);this.value="";});
+document.getElementById("charClearImg").onclick=function(){state.pendingCharImage=null;state.pendingCharFileName="";document.getElementById("charUploadName").textContent="";document.getElementById("charClearImg").style.display="none";syncChar();};
+function refreshCharUI(){
+  var lib=document.getElementById("charLib");if(lib){lib.innerHTML="";if(!state.realChars.length){lib.innerHTML='<p class="small" style="margin:0">No real character added yet — upload one above, name it, and tap “Add this character.”</p>';}else{state.realChars.forEach(function(c){var item=el('<div class="char-lib-item'+(getActiveChar()&&getActiveChar().id===c.id?" active":"")+'"></div>');item.innerHTML=(c.image?'<img src="'+c.image+'" alt="">':'<span class="lface" style="background:'+c.color+'">'+c.emoji+'</span>')+'<div class="grow"><b>'+escHtml(c.name)+'</b><span>'+(c.image?"Real uploaded art":"Original studio character")+'</span></div>';var useBtn=el('<button type="button">Use on cover</button>');useBtn.onclick=function(){state.activeCharId=c.id;render();applyTypo();toast(c.name+" is now on the cover & section pages");};var delBtn=el('<button type="button">Remove</button>');delBtn.onclick=function(){state.realChars=state.realChars.filter(function(x){return x.id!==c.id;});if(state.activeCharId===c.id)state.activeCharId=state.realChars.length?state.realChars[state.realChars.length-1].id:null;if(!state.realChars.length)state.charAdded=false;render();applyTypo();toast("Character removed");};item.appendChild(useBtn);item.appendChild(delBtn);lib.appendChild(item);});}}
+  var grid=document.getElementById("charStickerGrid");if(grid){grid.innerHTML="";state.realChars.forEach(function(c){var b;if(c.image){b=el('<button class="sticker-btn char-sticker-btn" title="'+escHtml(c.name)+' sticker"><img src="'+c.image+'" alt="'+escHtml(c.name)+'"></button>');}else{b=el('<button class="sticker-btn" title="'+escHtml(c.name)+' sticker">'+c.emoji+'</button>');}b.onclick=function(){var page=document.getElementById(state.activeId)||document.querySelector(".page");var z=page?page.querySelector(".sticker-zone"):null;if(!z){toast("Open a page with a sticker zone first");return;}var st;if(c.image){st=el('<img class="stk-img" src="'+c.image+'" alt="'+escHtml(c.name)+'">');}else{st=el('<span class="stk">'+c.emoji+'</span>');}st.title="Tap to remove";st.onclick=function(){st.remove();};z.appendChild(st);toast(c.name+" sticker added");};grid.appendChild(b);});var hint=document.getElementById("charStickerHint");if(hint)hint.style.display=state.realChars.length?"none":"";}
+}
+document.getElementById("charApply").onclick=function(){var nm=(document.getElementById("charName").value||"My Character").trim();var kind=document.getElementById("charKind").value;var c={id:Date.now(),name:nm,kind:kind,color:document.getElementById("charColor").value,trait:document.getElementById("charTrait").value||"",image:state.pendingCharImage||null,emoji:charEmoji(kind)};state.realChars.push(c);state.activeCharId=c.id;state.charAdded=true;render();applyTypo();jumpTo("page-character-"+c.id);toast(nm+" added — on the cover, its own page, section pages & stickers");};
 /* holidays sidebar */
 document.getElementById("holList").innerHTML=HOLIDAYS2026.map(function(h){return "<div><b>"+h[0]+"</b> "+h[1]+"</div>";}).join("");
 /* download */
@@ -564,8 +720,48 @@ document.getElementById("downloadBtn").onclick=function(){
   toast("Planner downloaded — open it anywhere, or print it to PDF");
 };
 document.getElementById("printHelpBtn").onclick=function(){var p=document.getElementById("printHelp");p.style.display=p.style.display==="none"?"block":"none";};
+function syncPageSize(){var v=document.getElementById("sizeSel").value;var sz=v==="a5"?"A5 portrait":v==="a4"?"A4 portrait":v==="half"?"5.5in 8.5in":"letter portrait";document.getElementById("pageSizeStyle").textContent="@page{size:"+sz+";margin:0}";}
+document.getElementById("sizeSel").addEventListener("change",syncPageSize);syncPageSize();
+function showPrintTips(){var p=document.getElementById("printHelp");p.style.display="block";}
+/* ============ REAL PDF EXPORT ============ */
+function pdfFormatFor(size){if(size==="a5")return{format:"a5",label:"A5"};if(size==="a4")return{format:"a4",label:"A4"};if(size==="half")return{format:[396,612],label:"Half Letter"};return{format:"letter",label:"Letter"};}
+function setPdfProgress(show,text,pct,count){var o=document.getElementById("pdfProgress");o.style.display=show?"grid":"none";if(text)document.getElementById("pdfProgressText").textContent=text;if(typeof pct==="number")document.getElementById("pdfBar").style.width=pct+"%";document.getElementById("pdfCount").textContent=count||"";}
+async function generatePDF(){
+  var sizeSel=document.getElementById("sizeSel");var size=sizeSel?sizeSel.value:"letter";var fmt=pdfFormatFor(size);
+  var JsPDF=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;var h2c=window.html2canvas;
+  if(!JsPDF||!h2c){toast("PDF maker is still loading — tap Download PDF again in a few seconds.");setPdfProgress(false);showPrintTips();return;}
+  var btn=document.getElementById("pdfBtn");btn.disabled=true;var oldBtn=btn.textContent;btn.textContent="Building PDF…";
+  setPdfProgress(true,"Capturing every page exactly as you filled it in — cover first, back cover last.",2,"");
+  try{
+    if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();
+    window.scrollTo(0,0);await new Promise(function(r){setTimeout(r,250);});
+    var pageEls=Array.prototype.slice.call(document.querySelectorAll("#pages .page"));
+    if(!pageEls.length)throw new Error("No planner pages found");
+    var doc=new JsPDF({orientation:"portrait",unit:"pt",format:fmt.format,compress:true});
+    var pdfW=doc.internal.pageSize.getWidth();var pdfH=doc.internal.pageSize.getHeight();
+    for(var i=0;i<pageEls.length;i++){
+      var pct=Math.round(((i)/pageEls.length)*100);setPdfProgress(true,"Adding page "+(i+1)+" of "+pageEls.length+" to your PDF…",pct,"Page "+(i+1)+" / "+pageEls.length+" • "+fmt.label);
+      var canvas=await h2c(pageEls[i],{scale:2,useCORS:true,allowTaint:false,backgroundColor:"#ffffff",logging:false});
+      var img=canvas.toDataURL("image/jpeg",0.92);
+      if(i>0)doc.addPage(fmt.format,"portrait");
+      var imgW=pdfW;var imgH=canvas.height*imgW/canvas.width;if(imgH>pdfH){imgH=pdfH;imgW=canvas.width*imgH/canvas.height;}
+      var x=(pdfW-imgW)/2;var y=(pdfH-imgH)/2;
+      doc.addImage(img,"JPEG",x,y,imgW,imgH,undefined,"FAST");
+      await new Promise(function(r){setTimeout(r,30);});
+    }
+    setPdfProgress(true,"Your PDF is ready — check your downloads.",100,pageEls.length+" pages • "+fmt.label);
+    var ownerName=(document.getElementById("ownerInput").value||"glam").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"glam";
+    var yr=document.getElementById("yearInput").value||"2026";
+    doc.save("glam-planner-"+ownerName+"-"+yr+".pdf");
+    toast("PDF downloaded — "+pageEls.length+" pages, ready to print");
+    setTimeout(function(){setPdfProgress(false);},900);
+  }catch(err){
+    setPdfProgress(false);toast("PDF hit a snag — printing tips opened as the fallback");showPrintTips();
+  }finally{btn.disabled=false;btn.textContent=oldBtn;}
+}
+document.getElementById("pdfBtn").onclick=generatePDF;
 /* init */
-render();applyTypo();syncChar();
+populateThemes();applyThemeVars(state.themeId);render();applyTypo();syncChar();
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
 </html>
