@@ -1,0 +1,29 @@
+{
+ "name": "Glam Planner Builder",
+ "short_name": "Glam Planner",
+ "description": "A fully customizable planner builder: pick a planner type, theme, character, art style and Vault typography, then get a cover, back cover and fillable insert pages with hyperlinked tabs, an index, digital stickers, notepad pages and a password keeper. Fill in, print, share.",
+ "start_url": ".",
+ "scope": ".",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#eaf3fd",
+ "theme_color": "#3d7dc4",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

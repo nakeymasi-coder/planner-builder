@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#3d7dc4">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Glam Planner">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<title>Glam Planner Builder — 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&family=Great+Vibes&family=Playfair+Display:wght@500;700;900&family=Poppins:wght@400;600;800&family=DM+Serif+Display&family=Bebas+Neue&family=Caveat:wght@600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e9e6e1; --panel:#ffffff; --panel2:#f7f5f2; --ink:#1c1a17; --muted:#6f6a63; --line:#ddd6cc;
+  --accent:#0f4c9c; --accent2:#c9a86a; --gold:#b9975b;
+  --sapphire:#123f7b; --pearl:#f4f1ea;
+  --paper:#fffdf8; --paper-line:#e8e2d6;
+  --cover-bg:#123f7b; --cover-ink:#ffffff; --cover-accent:#d4af6a;
+  --radius:18px;
+  --shadow:0 20px 50px rgba(28,24,18,.18), 0 2px 8px rgba(28,24,18,.12);
+  --font-body:"DM Sans",system-ui,sans-serif;
+  --font-display:"Cormorant Garamond",serif;
+  --font-cover:"Playfair Display",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#171512; --panel:#221f1c; --panel2:#2a2723; --ink:#f2ede6; --muted:#a8a099; --line:#3a352f; --paper:#fffdf8; }
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body)}
+a{color:inherit}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+
+/* TOP TOOLBAR */
+.toolbar{position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.brand{display:flex;gap:12px;align-items:center}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(145deg,#0f3568,#1b5cb8 55%,#0a2447);display:grid;place-items:center;color:#e8c87a;font-family:var(--font-display);font-size:24px;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.brand h1{font-family:var(--font-display);font-size:24px;line-height:1;margin:0;letter-spacing:.2px}
+.brand p{margin:2px 0 0;font-size:12.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{border:1px solid var(--line);background:var(--panel);padding:9px 14px;border-radius:999px;font-weight:700;font-size:13.5px}
+.btn.primary{background:#111;color:#fff;border-color:#111}
+.btn.gold{background:linear-gradient(180deg,#e6c87e,#c9a356);color:#231a06;border-color:#b9975b}
+.btn:active{transform:translateY(1px)}
+
+/* LAYOUT */
+.layout{max-width:1440px;margin:0 auto;display:grid;grid-template-columns:300px 1fr 320px;gap:18px;padding:18px}
+@media(max-width:1100px){.layout{grid-template-columns:260px 1fr} .right{grid-column:1/-1;order:3}}
+@media(max-width:720px){.layout{grid-template-columns:1fr;padding:12px}}
+
+/* PANELS */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.panel h2{font-family:var(--font-display);font-size:19px;margin:0 0 4px}
+.panel h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:16px 0 8px}
+.panel p.small{font-size:13px;color:var(--muted);line-height:1.5;margin:6px 0}
+label{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin:12px 0 6px}
+select,input[type=text],input[type=date],textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);color:var(--ink)}
+textarea{resize:vertical}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;font-weight:600;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
+.chip.active{background:#111;color:#fff;border-color:#111}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.swatch{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.swatch.active{box-shadow:0 0 0 3px #111}
+
+/* INDEX / TABS */
+.index-list{display:flex;flex-direction:column;gap:4px;max-height:56vh;overflow:auto}
+.index-link{display:flex;justify-content:space-between;gap:8px;text-align:left;padding:10px 11px;border-radius:10px;border:1px solid transparent;background:transparent;font-size:13.5px;font-weight:600}
+.index-link:hover{background:var(--panel2)}
+.index-link.active{background:#111;color:#fff}
+.index-link span.num{opacity:.55;font-weight:400;font-size:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;position:sticky;top:74px;z-index:20}
+.tab{padding:8px 12px;border-radius:999px 999px 6px 6px;border:1px solid var(--line);background:var(--panel);font-size:12.5px;font-weight:700}
+.tab.active{background:var(--cover-bg);color:var(--cover-ink);border-color:transparent}
+
+/* PLANNER PAGES — realistic paper */
+.pages{display:flex;flex-direction:column;gap:28px;align-items:center}
+.page{width:100%;max-width:820px;background:var(--paper);color:#221f1a;border-radius:6px 14px 14px 6px;box-shadow:var(--shadow);position:relative;padding:44px 46px 40px 58px;overflow:hidden}
+.page::before{content:"";position:absolute;left:22px;top:0;bottom:0;width:1px;background:#e3ddd0}
+.page::after{content:"";position:absolute;left:0;top:0;bottom:0;width:14px;background:linear-gradient(90deg,rgba(0,0,0,.14),transparent)}
+.holes{position:absolute;left:7px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:space-evenly}
+.holes i{width:11px;height:11px;border-radius:50%;background:var(--bg);box-shadow:inset 0 1px 3px rgba(0,0,0,.35);display:block}
+.page-kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#8a8172;font-weight:700}
+.page h2{font-family:var(--font-display);font-size:34px;line-height:1.05;margin:6px 0 8px;color:#1d1a15}
+.page h3{font-family:var(--font-display);font-size:20px;margin:20px 0 8px}
+.rule{height:2px;background:linear-gradient(90deg,var(--cover-accent),transparent);margin:10px 0 16px}
+[contenteditable]{outline:none;border-radius:6px} [contenteditable]:focus{background:#fff8e6;box-shadow:0 0 0 1px #e6c87e}
+[contenteditable]:empty::before{content:attr(data-ph);color:#b3aa99}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:560px){.field-grid{grid-template-columns:1fr}}
+.field label{color:#8a8172}
+.field input,.field textarea{width:100%;border:0;border-bottom:1px solid var(--paper-line);background:transparent;padding:8px 2px;border-radius:0;color:#221f1a}
+.field input:focus,.field textarea:focus{outline:none;border-bottom-color:var(--cover-accent);background:#fffaf0}
+table.pl{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0 4px}
+table.pl th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8a8172;padding:8px 6px;border-bottom:2px solid #2b2620}
+table.pl td{padding:4px 6px;border-bottom:1px solid var(--paper-line)}
+table.pl td input{width:100%;border:0;background:transparent;padding:6px 2px;color:#221f1a} table.pl td input:focus{outline:none;background:#fff8e6}
+.checkline{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--paper-line);font-size:14px}
+.checkline input[type=checkbox]{width:18px;height:18px;margin-top:1px;accent-color:var(--sapphire)}
+.lined{background-image:repeating-linear-gradient(transparent,transparent 31px,#e8e2d6 32px);line-height:32px;min-height:320px;padding:0 4px}
+.dotted{background-image:radial-gradient(#cfc6b2 1.2px,transparent 1.3px);background-size:22px 22px;min-height:320px;padding:12px}
+.blank{min-height:320px;border:1px dashed #ddd3bf;padding:12px}
+.sticker-zone{min-height:54px;border:1.5px dashed #d8cdb4;border-radius:10px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.sticker-zone:empty::before{content:"Sticker zone — tap a sticker on the right to add it here";color:#b3aa99;font-size:12.5px}
+.stk{font-size:22px;line-height:1;padding:6px 8px;background:#fff;border:1px solid #eee3c8;border-radius:999px;box-shadow:0 3px 8px rgba(0,0,0,.10)}
+
+/* COVER */
+.cover{padding:0;min-height:980px;display:flex;flex-direction:column}
+.cover-inner{flex:1;margin:18px;border:1px solid rgba(255,255,255,.35);outline:1px solid rgba(0,0,0,.15);outline-offset:6px;padding:54px 42px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.cover-pattern{position:absolute;inset:0;opacity:.16;pointer-events:none;font-family:serif;font-size:28px;line-height:1.6;overflow:hidden;word-break:break-all;padding:14px}
+.cover .brandline{letter-spacing:.34em;font-size:11px;text-transform:uppercase;opacity:.85}
+.cover-title{font-family:var(--font-cover);font-size:64px;line-height:.98;margin:22px 0 10px;max-width:620px}
+@media(max-width:560px){.cover-title{font-size:44px}.page{padding:36px 22px 32px 38px}}
+.cover-sub{font-size:15px;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+.cover-name{margin-top:auto;width:100%;max-width:420px}
+.cover-name input{background:transparent;border:0;border-bottom:1px solid rgba(255,255,255,.6);color:inherit;text-align:center;font-size:18px;padding:8px}
+.cover-name input::placeholder{color:rgba(255,255,255,.65)}
+.gold-foil{text-shadow:0 1px 0 rgba(255,255,255,.35),0 6px 18px rgba(0,0,0,.25)}
+.backcover{align-items:center;text-align:center;justify-content:center;min-height:700px;display:flex;flex-direction:column;gap:14px;padding:50px}
+
+/* THEMES */
+body[data-theme="glam"]{--cover-bg:linear-gradient(160deg,#0b2a52,#1450a0 55%,#081c38);--cover-ink:#fff;--cover-accent:#d9b96a}
+body[data-theme="lv"]{--cover-bg:linear-gradient(160deg,#4a3220,#6b4a2c 55%,#3a2716);--cover-ink:#f3e6cf;--cover-accent:#c9a356}
+body[data-theme="gg"]{--cover-bg:linear-gradient(160deg,#cbb99a,#b7a07a 55%,#a68f63);--cover-ink:#2e2416;--cover-accent:#7a2e2e}
+body[data-theme="halloween"]{--cover-bg:linear-gradient(160deg,#1d1426,#3b2352 60%,#120c1a);--cover-ink:#ffb347;--cover-accent:#ff7a1a}
+body[data-theme="christmas"]{--cover-bg:linear-gradient(160deg,#7a1620,#a51f2b 55%,#4f7a4a);--cover-ink:#fff8e7;--cover-accent:#d9b96a}
+body[data-theme="pup"]{--cover-bg:linear-gradient(160deg,#f4e3b2,#e8cf8a);--cover-ink:#4a2c14;--cover-accent:#c0392b}
+body[data-theme="cat"]{--cover-bg:linear-gradient(160deg,#f59e2c,#e07f13);--cover-ink:#2e1a05;--cover-accent:#7a3b06}
+body[data-theme="canary"]{--cover-bg:linear-gradient(160deg,#ffe45c,#ffd21a);--cover-ink:#3a2f05;--cover-accent:#e06a1a}
+body[data-theme="forest"]{--cover-bg:linear-gradient(160deg,#7fb2e5,#4a86c5);--cover-ink:#0e2a44;--cover-accent:#ffffff}
+body[data-theme="whirl"]{--cover-bg:linear-gradient(160deg,#8a5a2b,#6b3f1a);--cover-ink:#ffe9c2;--cover-accent:#ffb347}
+body[data-theme="blush"]{--cover-bg:linear-gradient(160deg,#f6d5dd,#eeb3c2);--cover-ink:#5b2333;--cover-accent:#b76e79}
+body[data-theme="noir"]{--cover-bg:linear-gradient(160deg,#141414,#2a2a2a);--cover-ink:#f2ede6;--cover-accent:#c9a356}
+.cover-bg{background:var(--cover-bg);color:var(--cover-ink)}
+.cover-bg .page-kicker,.cover-bg h2{color:var(--cover-ink)}
+
+/* CALENDAR */
+.cal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+.month{border:1px solid var(--paper-line);border-radius:10px;padding:10px;background:#fff}
+.month h4{margin:0 0 6px;font-family:var(--font-display);font-size:16px}
+.month table{width:100%;border-collapse:collapse;font-size:10.5px;text-align:center}
+.month td,.month th{padding:2px} .month th{color:#8a8172;font-size:9px}
+.month td.hol{color:#b42318;font-weight:700}
+.hol-list{font-size:13px;line-height:1.9}
+.hol-list b{display:inline-block;min-width:118px}
+
+/* STICKERS / CHARACTER */
+.sticker-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.sticker-btn{font-size:20px;padding:8px 0;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
+.char-preview{border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center;background:var(--panel2)}
+.char-face{width:92px;height:92px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-size:42px;box-shadow:inset 0 -10px 18px rgba(0,0,0,.15),0 10px 20px rgba(0,0,0,.15);border:3px solid #fff}
+details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--panel)}
+details summary{font-weight:800;cursor:pointer}
+.note{font-size:12px;color:var(--muted);line-height:1.5}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);opacity:0;background:#111;color:#fff;padding:11px 16px;border-radius:999px;font-size:13.5px;font-weight:700;z-index:99;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media print{
+  .toolbar,.left,.right,.tabs,.no-print{display:none!important}
+  body{background:#fff}.layout{display:block;padding:0}.pages{gap:0}
+  .page{box-shadow:none;max-width:none;page-break-after:always;border-radius:0}
+}
+</style>
+</head>
+<body data-theme="glam">
+
+<header class="toolbar">
+  <div class="brand">
+    <div class="brand-mark">G</div>
+    <div><h1>Glam Planner Builder</h1><p>2026 Edition • Fill • Print • Sell &amp; Share</p></div>
+  </div>
+  <div class="actions">
+    <button class="btn" id="addNoteBtn">+ Notepad page</button>
+    <button class="btn" id="downloadBtn">Download planner (.html)</button>
+    <button class="btn gold" id="printHelpBtn">How to print / save PDF</button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- LEFT: MASTER PLAN + INDEX -->
+  <aside class="left">
+    <div class="panel">
+      <h2>Planner Architect — Master Plan</h2>
+      <p class="small">Cleaned up, the way you asked it — this is the blueprint this builder follows:</p>
+      <details open>
+        <summary>1 — Pick a planner, get the whole set</summary>
+        <p class="small">Cover + back cover + a full insert set for the type you choose: Finance, Business, Social Media, Content Creator, Travel, Meal, Mom Binder, Self-Care, or Agenda. Core 2026 monthly / weekly / daily pages and a Password Keeper ride along with every set.</p>
+      </details>
+      <details>
+        <summary>2 — Theme changes everything at once</summary>
+        <p class="small">Pick a theme and the cover material, colors, page accents and title lettering all match it — luxury house-inspired looks, seasonal Halloween &amp; Christmas, and original character themes made for selling. Names of licensed cartoon characters are personal-use only; the sellable themes here are original, inspired-by characters.</p>
+      </details>
+      <details>
+        <summary>3 — Everything is click-and-type</summary>
+        <p class="small">Every title, table, checklist and note line on every page is editable. Add lined, dotted, blank or checklist notepad pages anywhere. Tap stickers into any page. Nothing is just decoration.</p>
+      </details>
+      <details>
+        <summary>4 — Fully hyperlinked</summary>
+        <p class="small">The index below and the tabs above the pages jump straight to every section — the way a hyperlinked digital planner works in GoodNotes / Notability.</p>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h2>Index — tap to jump</h2>
+      <p class="small">Hyperlinked contents. Every section, one tap away.</p>
+      <nav class="index-list" id="indexList" aria-label="Planner index"></nav>
+    </div>
+
+    <div class="panel">
+      <h2>2026 at a glance</h2>
+      <p class="small">Current-year dates only — U.S. federal holidays, 2026.</p>
+      <div class="hol-list" id="holList"></div>
+    </div>
+  </aside>
+
+  <!-- CENTER: PAGES -->
+  <main>
+    <div class="tabs" id="tabs"></div>
+    <div class="pages" id="pages"></div>
+    <p class="note no-print" style="text-align:center;margin-top:16px">Tip: click any heading, line or table cell on a page and type. Use your browser's Print → Save as PDF to export a finished, sellable copy.</p>
+  </main>
+
+  <!-- RIGHT: CUSTOMIZER -->
+  <aside class="right">
+    <div class="panel">
+      <h2>Build your planner</h2>
+      <label for="typeSel">Planner type — full insert set</label>
+      <select id="typeSel">
+        <option value="agenda">Agenda — Daily Life Planner</option>
+        <option value="finance">Finance Planner</option>
+        <option value="business">Business Planner</option>
+        <option value="social">Social Media Planner</option>
+        <option value="creator">Content Creator Planner</option>
+        <option value="travel">Travel Planner</option>
+        <option value="meal">Meal Planner</option>
+        <option value="mom">Mom Binder</option>
+        <option value="selfcare">Self-Care Planner</option>
+      </select>
+
+      <label for="themeSel">Theme — cover, colors &amp; pages match</label>
+      <select id="themeSel">
+        <option value="glam">Glam Sapphire &amp; Pearl</option>
+        <option value="lv">Paris Monogram — LV-inspired luxury</option>
+        <option value="gg">Milano Double-G — GG-inspired luxury</option>
+        <option value="noir">Noir &amp; Gold Editorial</option>
+        <option value="blush">Blush Rose Atelier</option>
+        <option value="halloween">Halloween — Midnight Pumpkin</option>
+        <option value="christmas">Christmas — Sapphire Noel</option>
+        <option value="pup">Classic Cartoon Pup — inspired, original</option>
+        <option value="cat">Lazy Orange Cat — inspired, original</option>
+        <option value="canary">Yellow Canary — inspired, original</option>
+        <option value="forest">Blue Forest Friends — inspired, original</option>
+        <option value="whirl">Whirlwind Rascal — Tasmanian-inspired, original</option>
+      </select>
+
+      <label>Cover material finish</label>
+      <div class="chips" id="finishChips">
+        <button class="chip active" data-finish="Saffiano leather">Saffiano leather</button>
+        <button class="chip" data-finish="Monogram canvas">Monogram canvas</button>
+        <button class="chip" data-finish="Quilted pearl">Quilted pearl</button>
+        <button class="chip" data-finish="Gloss lacquer">Gloss lacquer</button>
+        <button class="chip" data-finish="Linen cloth">Linen cloth</button>
+      </div>
+
+      <label for="typoSel">Typography — from the Glam Prompt Vault</label>
+      <select id="typoSel"></select>
+      <p class="small" id="typoPreview" style="font-size:22px;color:var(--ink)">Star Sapphire Lettering</p>
+
+      <label for="artSel">Art style — page illustration feel</label>
+      <select id="artSel">
+        <option>Minimal Luxe — clean editorial</option>
+        <option>Watercolor Atelier — soft washes</option>
+        <option>Vintage Boutique — serif &amp; rules</option>
+        <option>Modern Kawaii — rounded &amp; sweet</option>
+        <option>Photo-Real Studio — crisp product look</option>
+      </select>
+
+      <label>Accent color</label>
+      <div class="swatches" id="swatches"></div>
+
+      <label for="ownerInput">Name on the cover</label>
+      <input type="text" id="ownerInput" placeholder="e.g. Glam — or your buyer's name" value="Glam">
+      <label for="yearInput">Planner year</label>
+      <input type="text" id="yearInput" value="2026">
+    </div>
+
+    <div class="panel">
+      <h2>Digital stickers</h2>
+      <p class="small">Tap a sticker, then it lands in the sticker zone of the page you're viewing. Tap a placed sticker to remove it.</p>
+      <div class="sticker-grid" id="stickerGrid"></div>
+      <h3>Notepad page styles</h3>
+      <div class="chips">
+        <button class="chip" data-note="lined">Lined</button>
+        <button class="chip" data-note="dotted">Dotted</button>
+        <button class="chip" data-note="blank">Blank</button>
+        <button class="chip" data-note="checklist">Checklist</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Create your own character</h2>
+      <p class="small">Build an original mascot for your theme — name it, style it, and it gets its own page in the planner. Original characters are the ones you can sell.</p>
+      <div class="char-preview">
+        <div class="char-face" id="charFace" style="background:#ffd9e8">🦋</div>
+        <div style="font-weight:800" id="charNamePrev">Bibi the Butterfly</div>
+        <div class="note" id="charTraitPrev">Sapphire wings • Pearl bow • Collects tiny joys</div>
+      </div>
+      <label>Character name</label><input type="text" id="charName" value="Bibi the Butterfly">
+      <label>Kind</label>
+      <select id="charKind"><option>Butterfly</option><option>Kitten</option><option>Puppy</option><option>Bunny</option><option>Bear Cub</option><option>Canary</option><option>Whirlwind Rascal</option><option>Star Sprite</option></select>
+      <label>Signature color</label>
+      <select id="charColor"><option value="#7fb2e5">Sapphire blue</option><option value="#ffd9e8">Pearl pink</option><option value="#ffe45c">Canary yellow</option><option value="#f59e2c">Sunset orange</option><option value="#b7e3c0">Mint</option><option value="#d9c6f2">Lavender</option></select>
+      <label>Accessory &amp; trait</label><input type="text" id="charTrait" value="Pearl bow • Collects tiny joys">
+      <button class="btn primary" id="charApply" style="width:100%;margin-top:12px">Add my character to the planner</button>
+    </div>
+
+    <div class="panel">
+      <h2>Sell / share checklist</h2>
+      <div class="checkline"><input type="checkbox"><span>Original or inspired-by theme only for anything I sell</span></div>
+      <div class="checkline"><input type="checkbox"><span>Cover name left blank (or buyer's name) on the sellable copy</span></div>
+      <div class="checkline"><input type="checkbox"><span>Password Keeper pages removed from copies I sell</span></div>
+      <div class="checkline"><input type="checkbox"><span>Exported with Print → Save as PDF and checked page by page</span></div>
+    </div>
+  </aside>
+</div>
+
+<div id="printHelp" class="no-print" style="display:none;position:fixed;inset:auto 16px 16px auto;max-width:360px;z-index:80;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)">
+  <strong>Print / save as PDF</strong>
+  <p class="small" style="color:var(--muted);line-height:1.5">Open this page in your browser, then use <b>Print</b> (Ctrl/Cmd + P) → <b>Save as PDF</b>. The builder panels hide automatically and each planner page prints on its own sheet. Or tap <b>Download planner (.html)</b> above for an editable copy you can sell or share.</p>
+  <button class="btn" onclick="document.getElementById('printHelp').style.display='none'">Got it</button>
+</div>
+<div class="toast" id="toast">Done</div>
+
+<script>
+/* ============ DATA ============ */
+var TYPOS=[
+ {n:"Star Sapphire Jeweled Script",f:"'Great Vibes',cursive"},
+ {n:"Juicy Diamond Script",f:"'Great Vibes',cursive"},
+ {n:"Pink Crestelle Serif",f:"'Playfair Display',serif"},
+ {n:"Liquid Glass — Clean Sans",f:"'Space Grotesk',sans-serif"},
+ {n:"Retro Comic — Bold Display",f:"'Bebas Neue',sans-serif"},
+ {n:"Boho Carved Wood — Serif Slab",f:"'DM Serif Display',serif"},
+ {n:"Soft Mochi Puffy — Rounded",f:"'Poppins',sans-serif"},
+ {n:"Teddy Bear Plush — Handwritten",f:"'Caveat',cursive"},
+ {n:"Pom Pom Yarn — Cozy Script",f:"'Caveat',cursive"},
+ {n:"Pink Bubble Disco — Pop Bold",f:"'Poppins',sans-serif"},
+ {n:"Liquid Rainbow Glossy — Display",f:"'DM Serif Display',serif"},
+ {n:"Glitter Resin — Editorial Serif",f:"'Cormorant Garamond',serif"},
+ {n:"Crochet — Homespun Hand",f:"'Caveat',cursive"},
+ {n:"Classic Agenda — Cormorant",f:"'Cormorant Garamond',serif"}
+];
+var SETS={
+ agenda:{label:"Agenda",coverSub:"Daily Life Planner",sections:[
+   ["Daily Page","Focus, schedule & top 3",[["Date",""],["Today's top 3 priorities",""],["Schedule — hour by hour",""],["Notes & reminders",""]],"time"],
+   ["Weekly Spread","The week at a glance",[["Week of",""],["This week's one big goal",""],["Non-negotiables",""]],"week"],
+   ["Monthly Overview","Month goals & key dates",[["Month",""],["Goals this month",""],["Key dates",""],["Bills & appointments",""]],"rows:Date|Event|Done"],
+   ["Priorities & To-Dos","Brain dump, sorted",[["Must do today",""],["This week",""],["Later / someday",""]],"checks:Call|Email|Buy|Book|Finish|Plan"],
+   ["Notes & Ideas","Catch-all thinking page",[["Ideas",""],["Lists",""]],"lined"]
+ ]},
+ finance:{label:"Finance",coverSub:"Money Planner",sections:[
+   ["Monthly Budget","Income vs. plan vs. actual",[["Month",""],["Income total",""],["Fixed expenses",""],["Savings goal",""]],"rows:Category|Planned|Actual|Difference"],
+   ["Bills Due Tracker","Never miss a due date",[["",""]],"rows:Bill|Due date|Amount|Paid"],
+   ["Savings Goals","Watch each goal grow",[["",""]],"rows:Goal|Target|Saved so far|Target date"],
+   ["Debt Payoff Plan","Smallest win first",[["",""]],"rows:Debt|Balance|Min. payment|Extra payment"],
+   ["Spending Log","Where it actually went",[["",""]],"rows:Date|What|Category|Amount"]
+ ]},
+ business:{label:"Business",coverSub:"Business Planner",sections:[
+   ["Business Goals","Quarter vision & targets",[["Quarter",""],["Revenue target",""],["Top 3 goals",""],["Focus offer",""]],"checks:Launch|Post|Email list|Restock"],
+   ["Project Planner","One project, start to shipped",[["Project",""],["Deadline",""],["Milestones",""],["Who does what",""]],"rows:Step|Owner|Due|Status"],
+   ["Client Tracker","Every client, one view",[["",""]],"rows:Client|Project|Price|Status"],
+   ["Sales Tracker","Daily sales & best sellers",[["",""]],"rows:Date|Product|Channel|Amount"],
+   ["Meeting Notes","Decisions, not just talk",[["Meeting with",""],["Date",""],["Decisions made",""],["Next actions",""]],"lined"]
+ ]},
+ social:{label:"Social Media",coverSub:"Social Media Planner",sections:[
+   ["Content Calendar","A month of posts, planned",[["Month / platform",""]],"rows:Date|Platform|Topic|Posted"],
+   ["Post Ideas Bank","Never stare at a blank caption",[["Niche / series",""]],"checks:Hook written|Filmed|Edited|Caption|Hashtags"],
+   ["Hooks Library","Openings that stop the scroll",[["",""]],"rows:Hook|Topic|Used on"],
+   ["Filming Checklist","Shoot day, handled",[["Video title",""],["Location / outfit",""]],"checks:Charge phone|Clean lens|Ring light|Product in hand|CTA line"],
+   ["Stats Tracker","What the numbers say",[["",""]],"rows:Week|Followers|Views|Sales"]
+ ]},
+ creator:{label:"Content Creator",coverSub:"Creator Planner",sections:[
+   ["Video Planner","Idea to upload",[["Video title",""],["Hook (first 3 seconds)",""],["Script beats",""],["B-roll needed",""]],"checks:Script|Film|Edit|Thumbnail|Upload|Pin comment"],
+   ["Series Planner","Build a series that compounds",[["Series name",""],["Episode list",""]],"rows:Ep.|Title|Filmed|Posted"],
+   ["Brand Deals Tracker","Pitches, rates & deadlines",[["",""]],"rows:Brand|Contact|Rate|Deadline|Status"],
+   ["Content Batch Day","Film 5 in one sitting",[["Batch date",""]],"checks:Outfits ready|Props ready|Scripts printed|Cards cleared"],
+   ["Income & Collabs","Creator money, tracked",[["",""]],"rows:Month|Platform pay|Brand deals|Shop sales|Total"]
+ ]},
+ travel:{label:"Travel",coverSub:"Travel Planner",sections:[
+   ["Trip Overview","The trip on one page",[["Destination",""],["Dates",""],["Travelers",""],["Trip budget",""],["Why this trip",""]],"plain"],
+   ["Itinerary","Day by day",[["",""]],"rows:Day|Morning|Afternoon|Evening"],
+   ["Flights & Stays","All the confirmations",[["",""]],"rows:What|Date / time|Confirmation #|Notes"],
+   ["Packing List","Packed, not panicked",[["Trip",""]],"checks:Passport / ID|Chargers|Medications|Outfits|Toiletries|Snacks|Documents"],
+   ["Daily Plan & Spend","On-the-ground plan + costs",[["",""]],"rows:Date|Plan|Booked?|Cost"]
+ ]},
+ meal:{label:"Meal",coverSub:"Meal Planner",sections:[
+   ["Weekly Menu","Dinner, decided",[["Week of",""]],"rows:Day|Breakfast|Lunch|Dinner"],
+   ["Grocery List","Shop once, shop smart",[["Store",""]],"checks:Produce|Protein|Dairy|Pantry|Frozen|Household"],
+   ["Recipe Card","Keepers, written down",[["Recipe name",""],["Serves / time",""],["Ingredients",""],["Steps",""]],"lined"],
+   ["Prep Plan","Sunday prep, easy week",[["Prep day",""]],"checks:Wash produce|Cook grains|Marinate protein|Portion snacks|Freeze extras"],
+   ["Pantry & Freezer Inventory","Use what you have",[["",""]],"rows:Item|Have|Need|Expires"]
+ ]},
+ mom:{label:"Mom Binder",coverSub:"Family Binder",sections:[
+   ["Family Information","The essentials, one page",[["Family name",""],["Home address",""],["Pediatrician",""],["School(s)",""],["Insurance",""]],"plain"],
+   ["School Page","Teachers, dates & forms",[["",""]],"rows:Child|School / grade|Teacher|Key dates"],
+   ["Medical Page","Shots, meds & visits",[["",""]],"rows:Person|Doctor|Medication|Notes"],
+   ["Weekly Family Schedule","Who's where, when",[["Week of",""]],"rows:Day|School|Practice / events|Dinner|Notes"],
+   ["Emergency Contacts","In case of anything",[["",""]],"rows:Name|Relationship|Phone|Notes"]
+ ]},
+ selfcare:{label:"Self-Care",coverSub:"Self-Care Planner",sections:[
+   ["Habit Tracker","Small things, daily",[["Month",""]],"rows:Habit|Week 1|Week 2|Week 3|Week 4"],
+   ["Mood & Energy Log","Patterns tell the truth",[["",""]],"rows:Date|Mood|Energy 1–10|What helped"],
+   ["Gratitude Page","Three good things",[["Today I am grateful for",""],["A small win",""],["Someone who showed up for me",""]],"lined"],
+   ["Morning & Evening Routines","Bookends for the day",[["Morning routine",""],["Evening wind-down",""],["Sleep goal",""]],"checks:Water|Stretch|Skincare|Prayer / quiet|No phone first hour"],
+   ["Reflection Page","Monthly check-in with yourself",[["What gave me energy",""],["What drained me",""],["What I am letting go of",""],["What I want more of",""]],"lined"]
+ ]}
+};
+var HOLIDAYS2026=[
+ ["Thu, Jan 1","New Year's Day"],["Mon, Jan 19","Martin Luther King Jr. Day"],["Mon, Feb 16","Presidents' Day"],
+ ["Mon, May 25","Memorial Day"],["Fri, Jun 19","Juneteenth"],["Fri, Jul 3","Independence Day (observed) — Jul 4 falls on Saturday"],
+ ["Mon, Sep 7","Labor Day"],["Mon, Oct 12","Columbus Day / Indigenous Peoples' Day"],["Wed, Nov 11","Veterans Day"],
+ ["Thu, Nov 26","Thanksgiving Day"],["Fri, Dec 25","Christmas Day"]
+];
+var STICKERS=["🦋","⭐","💎","🌸","🎀","👑","✨","💙","🍂","🎃","🎄","❄️","🌷","☕","✈️","💰","📌","✅","🔖","💡","📸","🛍️","🍽️","🧸","🐾","🌈","💐","🕯️","📖","💌"];
+var MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var state={noteCount:0,charAdded:false,finish:"Saffiano leather",accent:"#1450a0",activeId:"page-cover"};
+
+/* ============ HELPERS ============ */
+function el(html){var d=document.createElement("div");d.innerHTML=html;return d.firstElementChild;}
+function toast(msg){var t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},1800);}
+function holes(){return '<div class="holes"><i></i><i></i><i></i><i></i><i></i><i></i></div>';}
+function stickerZone(){return '<h3>Stickers</h3><div class="sticker-zone"></div>';}
+function tableFrom(spec){
+  var cols=spec.split("|");var rows="";
+  for(var r=0;r<6;r++){rows+="<tr>"+cols.map(function(){return '<td><input type="text"></td>';}).join("")+"</tr>";}
+  return '<table class="pl"><tr>'+cols.map(function(c){return "<th>"+c+"</th>";}).join("")+"</tr>"+rows+"</table>";
+}
+function checksFrom(spec){
+  return spec.split("|").map(function(c){return '<label class="checkline"><input type="checkbox"><span contenteditable="true">'+c+'</span></label>';}).join("");
+}
+function fieldsHtml(fields){
+  return '<div class="field-grid">'+fields.map(function(f){return '<div class="field"><label>'+f[0]+'</label><input type="text" placeholder="Type here…"></div>';}).join("")+"</div>";
+}
+function sectionBody(sec){
+  var kind=sec[3]||"plain";var h="";
+  if(kind.indexOf("rows:")===0)h+=tableFrom(kind.slice(5));
+  else if(kind.indexOf("checks:")===0)h+=fieldsHtml(sec[2])+checksFrom(kind.slice(7));
+  else if(kind==="lined")h+=fieldsHtml(sec[2].slice(0,1))+'<div class="lined" contenteditable="true" data-ph="Write here…"></div>';
+  else if(kind==="week")h+=fieldsHtml(sec[2])+'<table class="pl"><tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr><tr>'+("<td><input type='text'></td>").repeat(7)+"</tr></table>";
+  else if(kind==="time")h+=fieldsHtml(sec[2])+'<table class="pl"><tr><th>Time</th><th>Plan</th></tr>'+["6 AM","8 AM","10 AM","12 PM","2 PM","4 PM","6 PM","8 PM"].map(function(t){return "<tr><td style='width:80px'><b>"+t+"</b></td><td><input type='text'></td></tr>";}).join("")+"</table>";
+  else h+=fieldsHtml(sec[2]);
+  return h+stickerZone();
+}
+function monthCal(y,m){
+  var first=new Date(y,m,1).getDay();var days=new Date(y,m+1,0).getDate();var s="<table><tr><th>S</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th><th>S</th></tr><tr>";
+  for(var i=0;i<first;i++)s+="<td></td>";var holDays={0:[1],4:[25],10:[26],11:[25]};
+  for(var d=1;d<=days;d++){var hol=(holDays[m]&&holDays[m].indexOf(d)>-1)?' class="hol"':"";s+="<td"+hol+">"+d+"</td>";if((first+d)%7===0&&d<days)s+="</tr><tr>";}
+  return s+"</tr></table>";
+}
+
+/* ============ RENDER ============ */
+function render(){
+  var type=document.getElementById("typeSel").value;var set=SETS[type];
+  var owner=document.getElementById("ownerInput").value||"Glam";
+  var year=document.getElementById("yearInput").value||"2026";
+  var pages=document.getElementById("pages");pages.innerHTML="";var index=[];var n=0;
+  function addPage(id,kicker,title,body,extraClass){
+    n++;var p=el('<section class="page '+(extraClass||"")+'" id="'+id+'">'+holes()+'<div class="page-kicker">'+kicker+'</div><h2 contenteditable="true">'+title+'</h2><div class="rule"></div>'+body+'</section>');
+    pages.appendChild(p);index.push([id,title]);return p;
+  }
+  /* COVER */
+  n++;var themeName=document.getElementById("themeSel").selectedOptions[0].textContent;
+  var pattern=document.body.dataset.theme==="lv"?"✦ LV ✦ LV ✦ LV ✦ LV ":document.body.dataset.theme==="gg"?"G G · G G · G G · ":"";
+  var cover=el('<section class="page cover cover-bg" id="page-cover"><div class="cover-inner"><div class="cover-pattern">'+(pattern.repeat(40))+'</div><div class="brandline" contenteditable="true">The '+year+' Collection • '+state.finish+'</div><div class="cover-title gold-foil" id="coverTitle" contenteditable="true">'+set.label+' Planner</div><div class="cover-sub" contenteditable="true">'+set.coverSub+' • '+year+'</div><p style="max-width:440px;line-height:1.6;opacity:.9" contenteditable="true">A planner made to be used — every page clicks, types and prints beautifully.</p><div class="cover-name"><label style="color:inherit;opacity:.8">This planner belongs to</label><input type="text" value="'+owner.replace(/"/g,"")+'" aria-label="Owner name"></div><div style="margin-top:14px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;opacity:.8" contenteditable="true">'+themeName+'</div></div></section>');
+  cover.querySelector(".cover-title").style.fontFamily=getComputedStyle(document.documentElement).getPropertyValue("--font-cover");
+  pages.appendChild(cover);index.push(["page-cover","Cover"]);
+  /* INDEX PAGE */
+  addPage("page-index","Contents","Index — tap any line to jump",'<div id="indexInPage"></div><p class="note">This index is hyperlinked — in the printed PDF and on screen, each line jumps to its section.</p>');
+  /* SET SECTIONS */
+  set.sections.forEach(function(sec,i){addPage("page-sec-"+i,set.label+" • Insert "+(i+1),sec[0],'<p contenteditable="true" data-ph="What is this page for?">'+sec[1]+'</p>'+sectionBody(sec));});
+  /* 2026 CALENDAR */
+  var calBody='<div class="cal-grid">'+MONTHS.map(function(mn,m){return '<div class="month"><h4>'+mn+' '+year+'</h4>'+monthCal(2026,m)+'</div>';}).join("")+'</div><h3>2026 U.S. Holidays</h3><div class="hol-list">'+HOLIDAYS2026.map(function(h){return "<div><b>"+h[0]+"</b> "+h[1]+"</div>";}).join("")+"</div>"+stickerZone();
+  addPage("page-calendar","Core Pages","2026 Year at a Glance",calBody);
+  /* WEEKLY + DAILY core */
+  addPage("page-weekly","Core Pages","Weekly Plan",sectionBody(["Weekly Plan","Your seven days, planned",[["Week of",""],["Top priority this week",""]],"week"]));
+  /* PASSWORD KEEPER */
+  var pwRows="";for(var r=0;r<8;r++)pwRows+='<tr><td><input type="text" placeholder="Site / app"></td><td><input type="text" placeholder="Username"></td><td><input type="password" placeholder="Password"></td><td><input type="text" placeholder="Notes"></td></tr>';
+  addPage("page-passwords","Private Section","Password Keeper",'<p contenteditable="true">For your personal copy only — remove this page from any planner you sell or share. Passwords typed here live on this page only and are never sent anywhere.</p><table class="pl"><tr><th>Site</th><th>Username</th><th>Password</th><th>Notes</th></tr>'+pwRows+'</table><button class="btn no-print" id="pwToggle" style="margin-top:10px">Show / hide passwords</button>'+stickerZone());
+  /* NOTEPAD STARTER */
+  addPage("page-notes","Notepad","Notes — Lined",'<div class="lined" contenteditable="true" data-ph="Start writing…"></div>'+stickerZone());
+  /* CHARACTER PAGE */
+  if(state.charAdded){
+    var nm=document.getElementById("charName").value||"My Character";var kind=document.getElementById("charKind").value;var col=document.getElementById("charColor").value;var tr=document.getElementById("charTrait").value;
+    addPage("page-character","My Character",nm,'<div style="text-align:center;padding:10px 0"><div class="char-face" style="background:'+col+';width:130px;height:130px;font-size:58px;margin:0 auto">'+charEmoji(kind)+'</div><p contenteditable="true" style="margin-top:12px">'+kind+' • '+tr+'</p></div><div class="field-grid"><div class="field"><label>Personality</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Favorite things</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Catchphrase</label><input type="text" placeholder="Type here…"></div><div class="field"><label>Shows up on these pages</label><input type="text" placeholder="Type here…"></div></div>'+stickerZone());
+  }
+  /* BACK COVER */
+  n++;var back=el('<section class="page cover-bg" id="page-back"><div class="backcover" style="min-height:640px"><div class="brandline" style="letter-spacing:.3em;font-size:11px;text-transform:uppercase" contenteditable="true">Back Cover</div><h2 style="font-family:var(--font-display);font-size:40px;color:inherit" contenteditable="true">Plan it. Live it. Glam it.</h2><p style="max-width:420px;line-height:1.7;opacity:.92" contenteditable="true">Thank you for planning with me. New themes, inserts and sticker packs drop with every collection.</p><div class="field" style="width:100%;max-width:360px"><label style="color:inherit;opacity:.8">Shop / social handle</label><input type="text" placeholder="@yourhandle" style="color:inherit;border-bottom-color:rgba(255,255,255,.5);text-align:center"></div><div style="font-size:12px;letter-spacing:.18em;text-transform:uppercase;opacity:.75" contenteditable="true">© '+year+' • Designed with the Glam Planner Builder</div></div></section>');
+  pages.appendChild(back);index.push(["page-back","Back Cover"]);
+  /* INDEX + TABS */
+  var idx=document.getElementById("indexList");idx.innerHTML="";
+  var inPage=document.getElementById("indexInPage");if(inPage)inPage.innerHTML="";
+  index.forEach(function(it,i){
+    var b=el('<button class="index-link"><span>'+it[1]+'</span><span class="num">'+String(i+1).padStart(2,"0")+'</span></button>');
+    b.onclick=function(){jumpTo(it[0]);};idx.appendChild(b);
+    if(inPage){var row=el('<button class="index-link" style="width:100%;border-bottom:1px solid var(--paper-line);border-radius:0"><span>'+it[1]+'</span><span class="num">p. '+(i+1)+'</span></button>');row.onclick=function(){jumpTo(it[0]);};inPage.appendChild(row);}
+  });
+  var tabs=document.getElementById("tabs");tabs.innerHTML="";
+  index.slice(0,9).forEach(function(it){var t=el('<button class="tab">'+it[1]+'</button>');t.dataset.target=it[0];t.onclick=function(){jumpTo(it[0]);};tabs.appendChild(t);});
+  var pw=document.getElementById("pwToggle");
+  if(pw)pw.onclick=function(){document.querySelectorAll('#page-passwords input[type=password], #page-passwords input[data-show="1"]').forEach(function(inp){if(inp.type==="password"){inp.type="text";inp.dataset.show="1";}else{inp.type="password";delete inp.dataset.show;}});};
+  observePages();
+}
+function jumpTo(id){state.activeId=id;var t=document.getElementById(id);if(t)t.scrollIntoView({behavior:"smooth",block:"start"});markActive(id);}
+function markActive(id){
+  document.querySelectorAll(".index-link").forEach(function(b){});
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.toggle("active",t.dataset.target===id);});
+}
+var observer;
+function observePages(){
+  if(observer)observer.disconnect();
+  observer=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){state.activeId=e.target.id;markActive(e.target.id);}});},{rootMargin:"-30% 0px -55% 0px"});
+  document.querySelectorAll(".page").forEach(function(p){observer.observe(p);});
+}
+function charEmoji(kind){return {"Butterfly":"🦋","Kitten":"🐱","Puppy":"🐶","Bunny":"🐰","Bear Cub":"🧸","Canary":"🐤","Whirlwind Rascal":"🌪️","Star Sprite":"⭐"}[kind]||"🦋";}
+
+/* ============ CONTROLS ============ */
+var typoSel=document.getElementById("typoSel");
+TYPOS.forEach(function(t,i){var o=document.createElement("option");o.value=i;o.textContent=t.n;typoSel.appendChild(o);});
+function applyTypo(){var t=TYPOS[typoSel.value];document.documentElement.style.setProperty("--font-cover",t.f);document.getElementById("typoPreview").style.fontFamily=t.f;document.getElementById("typoPreview").textContent=t.n.split("—")[0].trim();var ct=document.getElementById("coverTitle");if(ct)ct.style.fontFamily=t.f;}
+typoSel.addEventListener("change",applyTypo);
+document.getElementById("typeSel").addEventListener("change",function(){render();applyTypo();toast(SETS[this.value].label+" insert set loaded — cover, inserts, core pages & back cover");});
+document.getElementById("themeSel").addEventListener("change",function(){document.body.dataset.theme=this.value;render();applyTypo();toast("Theme applied — cover, colors, pages & lettering now match");});
+document.getElementById("artSel").addEventListener("change",function(){toast("Art style set: "+this.value);});
+document.getElementById("ownerInput").addEventListener("input",function(){var inp=document.querySelector(".cover-name input");if(inp)inp.value=this.value;});
+document.getElementById("yearInput").addEventListener("change",function(){render();applyTypo();});
+document.getElementById("finishChips").addEventListener("click",function(e){var b=e.target.closest("[data-finish]");if(!b)return;state.finish=b.dataset.finish;document.querySelectorAll("#finishChips .chip").forEach(function(c){c.classList.toggle("active",c===b);});render();applyTypo();toast("Cover finish: "+state.finish);});
+/* accent swatches */
+["#1450a0","#b9975b","#7a1620","#111111","#b76e79","#4f7a4a","#e07f13"].forEach(function(c,i){var s=el('<button class="swatch'+(i===0?" active":"")+'" style="background:'+c+'" aria-label="Accent '+c+'"></button>');s.onclick=function(){state.accent=c;document.documentElement.style.setProperty("--cover-accent",c);document.querySelectorAll(".swatch").forEach(function(x){x.classList.toggle("active",x===s);});};document.getElementById("swatches").appendChild(s);});
+/* stickers */
+STICKERS.forEach(function(s){var b=el('<button class="sticker-btn">'+s+'</button>');b.onclick=function(){var page=document.getElementById(state.activeId)||document.querySelector(".page");var z=page? page.querySelector(".sticker-zone"):null;if(!z){toast("Open a page with a sticker zone first");return;}var st=el('<span class="stk">'+s+'</span>');st.title="Tap to remove";st.onclick=function(){st.remove();};z.appendChild(st);toast("Sticker added to "+(page.querySelector("h2")?page.querySelector("h2").textContent:"page"));};document.getElementById("stickerGrid").appendChild(b);});
+/* notepad add */
+function addNote(style){
+  state.noteCount++;var pages=document.getElementById("pages");var back=document.getElementById("page-back");
+  var body=style==="dotted"?'<div class="dotted" contenteditable="true" data-ph="Dot-grid notes…"></div>':style==="blank"?'<div class="blank" contenteditable="true" data-ph="Blank page — sketch, brainstorm, anything…"></div>':style==="checklist"?checksFrom("Task one|Task two|Task three|Task four|Task five|Task six"): '<div class="lined" contenteditable="true" data-ph="Start writing…"></div>';
+  var p=el('<section class="page" id="page-note-'+state.noteCount+'">'+holes()+'<div class="page-kicker">Notepad • '+style+'</div><h2 contenteditable="true">Notes — '+style.charAt(0).toUpperCase()+style.slice(1)+'</h2><div class="rule"></div>'+body+stickerZone()+'</section>');
+  pages.insertBefore(p,back);toast("Notepad page added ("+style+") — find it before the back cover");
+}
+document.getElementById("addNoteBtn").onclick=function(){addNote("lined");};
+document.querySelectorAll("[data-note]").forEach(function(b){b.onclick=function(){addNote(b.dataset.note);};});
+/* character builder */
+function syncChar(){var kind=document.getElementById("charKind").value;document.getElementById("charFace").textContent=charEmoji(kind);document.getElementById("charFace").style.background=document.getElementById("charColor").value;document.getElementById("charNamePrev").textContent=document.getElementById("charName").value||"My Character";document.getElementById("charTraitPrev").textContent=kind+" • "+(document.getElementById("charTrait").value||"");}
+["charName","charKind","charColor","charTrait"].forEach(function(id){document.getElementById(id).addEventListener("input",syncChar);});
+document.getElementById("charApply").onclick=function(){state.charAdded=true;render();applyTypo();jumpTo("page-character");toast("Your character has its own page in the planner");};
+/* holidays sidebar */
+document.getElementById("holList").innerHTML=HOLIDAYS2026.map(function(h){return "<div><b>"+h[0]+"</b> "+h[1]+"</div>";}).join("");
+/* download */
+document.getElementById("downloadBtn").onclick=function(){
+  var clone=document.documentElement.cloneNode(true);
+  var blob=new Blob(["<!doctype html>\n"+clone.outerHTML],{type:"text/html"});
+  var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="glam-planner-2026.html";a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  toast("Planner downloaded — open it anywhere, or print it to PDF");
+};
+document.getElementById("printHelpBtn").onclick=function(){var p=document.getElementById("printHelp");p.style.display=p.style.display==="none"?"block":"none";};
+/* init */
+render();applyTypo();syncChar();
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}</script></body>
+</html>
